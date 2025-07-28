@@ -240,3 +240,79 @@
 		justify-content: center;
 	  }
 	}
+	.button-row {
+	  display: flex;
+	  flex-wrap: wrap;
+	  justify-content: center;
+	  gap: 1rem;
+	  max-width: 95%;
+	  margin: 1rem auto;
+	}
+
+	.button-row button,
+	.button-row input[type="text"] {
+	  flex: 1 1 auto;
+	  min-width: 180px;
+	  max-width: 300px;
+	}
+	
+	.popup-stream-entry:hover {
+	  background-color: var(--orchid-pink) !important;
+	}
+	.popup-btn {
+	  display: block;
+	  width: 100%;
+	  margin-bottom: 0.75rem;
+	  padding: 0.75rem 1rem;
+	  font-size: 1rem;
+	  background-color: #96DDDC;
+	  color: #37153A;
+	  font-weight: bold;
+	  border: none;
+	  border-radius: 8px;
+	  cursor: pointer;
+	  transition: background-color 0.2s;
+	}
+
+	.popup-btn:hover {
+      background-color: #75d4d4;
+      transform: scale(1.03);
+	}
+
+	/* Markierte Zeile */
+	.selectable-row {
+	  cursor: pointer;
+	  transition: background-color 0.2s;
+	}
+
+	.selectable-row.selected {
+	  background-color: var(--tiffany-blue) !important;
+	  color: #37153A;
+	}
+
+	#stream-select-list {
+	  display: grid;
+	  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	  gap: 0.75rem;
+	  margin-bottom: 1rem;
+	}
+
+	.stream-option {
+	  padding: 0.75rem;
+	  border-radius: 8px;
+	  text-align: center;
+	  cursor: pointer;
+	  background-color: #37153A;
+	  transition: background-color 0.2s, color 0.2s;
+	}
+
+	.stream-option.selected {
+	  background-color: var(--tiffany-blue);
+	  color: #37153A;
+	  font-weight: bold;
+	}
+
+	.stream-option:hover {
+	  background-color: #5fcbc9;
+	  color: #fff;
+	}
