@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BubbleFam Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="112_BF.png">
+ 
+  <script src="streamer-config.js"></script>
+  <script src="script.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="logo-container">
+    <img src="112_BF_big.png" alt="Logo links" class="logo-image">
+	<div>
+		<h1>BubbleFam LIVE Status</h1>
+		<button onclick="loadStatus()">Status aktualisieren</button>
+		<input type="text" id="searchInput" placeholder="Suche nach Name oder Spiel..." onkeyup="filterTable()">
+	</div>
+    <img src="112_BF_big.png" alt="Logo rechts" class="logo-image">
+  </div>
+  <table id="streamTable">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Status</th>
+        <th onclick="sortTable(1)">Name</th>
+        <th onclick="sortTable(2)">Stream-Titel</th>
+        <th onclick="sortTable(3)">Spiel</th>
+        <th>Link</th>
+      </tr>
+    </thead>
+    <tbody id="streamer-table">
+      <tr><td colspan="5">Bitte aktualisieren...</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>
