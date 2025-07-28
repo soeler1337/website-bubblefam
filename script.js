@@ -1,36 +1,26 @@
-let accessToken
-let clientId
-async function fetchAccessToken() {
-  const response = await fetch('https://soeler-twitch-proxy.vercel.app/api/token');
-  const data = await response.json();
+let allStreams = [];
 
-  accessToken = data.access_token;
-  clientId = data.clientId
+async function fetchStreams() {
+	const usernames = streamerList
+	  .map(s => s.twitchName?.toLowerCase().split('?')[0])
+	  .filter(Boolean);
+
+	const response = await fetch('https://soeler-twitch-proxy.vercel.app/api/streamers', {
+	  method: 'POST',
+	  headers: { 'Content-Type': 'application/json' },
+	  body: JSON.stringify({ usernames })
+	});
+
+	const data = await response.json();
+
+	allStreams = data.streams
 }
 
 async function loadStatus() {
   const table = document.getElementById('streamer-table');
   table.innerHTML = '<tr><td colspan="5">Lade...</td></tr>';
-  await fetchAccessToken();
-
-  const usernames = streamerList.map(s => s.twitchName.toLowerCase().split('?')[0]).filter(Boolean);
-  const headers = {
-    'Client-ID': clientId,
-    'Authorization': `Bearer ${accessToken}`
-  };
-
-  const chunks = [];
-  for (let i = 0; i < usernames.length; i += 100) {
-    chunks.push(usernames.slice(i, i + 100));
-  }
-
-  let allStreams = [];
-  for (const chunk of chunks) {
-    const params = chunk.map(u => `user_login=${encodeURIComponent(u)}`).join('&');
-    const res = await fetch(`https://api.twitch.tv/helix/streams?${params}`, { headers });
-    const data = await res.json();
-    allStreams = allStreams.concat(data.data);
-  }
+  
+  await fetchStreams();
 
   const liveMap = {};
   allStreams.forEach(s => {
