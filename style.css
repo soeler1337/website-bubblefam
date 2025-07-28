@@ -188,3 +188,28 @@
 	footer a:hover {
 		text-decoration: underline;
 	}
+	.logo-container {
+	  display: flex;
+	  justify-content: space-between;
+	  align-items: center;
+	  margin-bottom: 1rem;
+	  flex-wrap: wrap;
+	}
+
+	.left-logo,
+	.right-logo {
+	  width: 120px;
+	  height: auto;
+	}
+
+	@media (max-width: 768px) {
+	  .logo-container {
+		justify-content: center;
+		gap: 1rem;
+	  }
+
+	  .left-logo,
+	  .right-logo {
+		width: 100px;
+	  }
+	}
