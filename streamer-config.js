@@ -798,5 +798,37 @@ const streamerList = [
   {
     "name": "Gol_D_Ibo47",
     "twitchName": "gol_d_ibo47"
+  },
+  {
+    "name": "xMarcello89",
+    "twitchName": "xmarcello89"
+  },
+  {
+    "name": "whosmarc_",
+    "twitchName": "whosmarc_"
+  },
+  {
+    "name": "xJaiy",
+    "twitchName": "xjaiy"
+  },
+  {
+    "name": "timmingerx",
+    "twitchName": "timmingerx"
+  },
+  {
+    "name": "jaimyleejaxen ",
+    "twitchName": "jaimyleejaxen"
+  },
+  {
+    "name": "Aku",
+    "twitchName": "akustreamz"
+  },
+  {
+    "name": "Micangelus",
+    "twitchName": "micangelus"
+  },
+  {
+    "name": "OGSavageTTV",
+    "twitchName": "ogsavagettv"
   }
 ];
