@@ -172,12 +172,20 @@
         gap: 1rem;
       }
     }
+	/* Footer */
+	footer {
+		text-align: center;
+		padding: 20px;
+		background: #ffffff;
+		font-size: 14px;
+		border-top: 2px solid #a8dadc;
+	}
 	footer a {
     color: #6d6875;
     text-decoration: none;
     font-weight: bold;
-}
+	}
 
-footer a:hover {
-    text-decoration: underline;
-}
+	footer a:hover {
+		text-decoration: underline;
+	}
