@@ -213,6 +213,19 @@
 	  }
 	}
 	.table-wrapper {
-  overflow-x: auto;
-  width: 100%;
-}
+	  overflow-x: auto;
+	  width: 100%;
+	}
+	@media (max-width: 768px) {
+	  .logo-right {
+		display: none;
+	  }
+
+	  .logo-left {
+		margin: 0 auto;
+	  }
+
+	  header {
+		justify-content: center;
+	  }
+	}
