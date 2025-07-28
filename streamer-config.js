@@ -344,10 +344,6 @@ const streamerList = [
     "twitchName": "therealmo24"
   },
   {
-    "name": "OsmoHD",
-    "twitchName": "osmohd"
-  },
-  {
     "name": "Randomhero_Alex",
     "twitchName": "randomhero_alex"
   },
@@ -762,10 +758,6 @@ const streamerList = [
   {
     "name": "locke_die_socke1",
     "twitchName": "locke_die_socke1"
-  },
-  {
-    "name": "TheRealNxsch",
-    "twitchName": "therealnxsch"
   },
   {
     "name": "nepitajme",
