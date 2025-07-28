@@ -212,3 +212,7 @@
 		width: 100px;
 	  }
 	}
+	.table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
