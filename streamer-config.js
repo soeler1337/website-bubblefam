@@ -1,6 +1,6 @@
 const streamerList = [
   {
-    "name": "Soeler1337",
+    "name": "Soeler",
     "twitchName": "soeler1337"
   },
   {
