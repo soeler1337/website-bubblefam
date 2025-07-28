@@ -38,7 +38,7 @@ async function loadStatus() {
       <td>${username}</td>
       <td>${live ? live.title : ''}</td>
       <td>${live ? live.game_name : ''}</td>
-      <td><a href="https://www.twitch.tv/${username}" target="_blank">Twitch</a></td>
+      <td><a class="live-link" href="https://www.twitch.tv/${username}" target="_blank">Twitch</a></td>
     `;
     table.appendChild(tr);
   });
