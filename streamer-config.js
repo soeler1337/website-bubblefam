@@ -552,10 +552,6 @@ const streamerList = [
     "twitchName": "endertainmentt"
   },
   {
-    "name": "okceline",
-    "twitchName": "okceline"
-  },
-  {
     "name": "Chris_Again",
     "twitchName": "chrys_again"
   },
