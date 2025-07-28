@@ -168,6 +168,7 @@
     @media (max-width: 768px) {
       h1 {
         font-size: 1.6rem;
+        margin: 0.7rem 0 0;
       }
 
       th, td {
