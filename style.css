@@ -111,7 +111,16 @@
     tr.offline td {
       background-color: rgba(163, 99, 98, 0.08);
     }
-
+	tbody tr:hover td {
+	  background-color: var(--orchid-pink);
+	  transition: background-color 0.2s ease-in-out;
+	}
+	th:nth-child(2),
+	td:nth-child(2) {
+	  max-width: 140px;
+	  width: 140px;
+	  word-break: break-word;
+	}
     .status-dot {
       display: inline-block;
       width: 10px;
