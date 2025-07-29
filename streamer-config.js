@@ -830,5 +830,25 @@ const streamerList = [
   {
     "name": "OGSavageTTV",
     "twitchName": "ogsavagettv"
+  },
+  {
+    "name": "JunaCat",
+    "twitchName": "junacattv"
+  },
+  {
+    "name": "ADDN ",
+    "twitchName": "allesdennochnix"
+  },
+  {
+    "name": "cptn_rage",
+    "twitchName": "cptn_rage"
+  },
+  {
+    "name": "Z1X3L",
+    "twitchName": "z1x3l"
+  },
+  {
+    "name": "leone_x3",
+    "twitchName": "leone_x3"
   }
 ];
