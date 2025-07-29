@@ -79,8 +79,8 @@ function sortTable(n) {
         break;
       }
     }
-    if (!switching && switchcount === 0 && dir === "asc") {
-      dir = "desc";
+    if (!switching && switchcount === 0 && dir === "desc") {
+      dir = "asc";
       switching = true;
     }
   }
