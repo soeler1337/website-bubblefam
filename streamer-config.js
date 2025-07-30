@@ -850,5 +850,9 @@ const streamerList = [
   {
     "name": "leone_x3",
     "twitchName": "leone_x3"
+  },
+  {
+    "name": "DomiiBoZZ",
+    "twitchName": "domiibozz"
   }
 ];
