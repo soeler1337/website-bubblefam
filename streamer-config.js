@@ -820,10 +820,6 @@ const streamerList = [
     "twitchName": "jaimyleejaxen"
   },
   {
-    "name": "Micangelus",
-    "twitchName": "micangelus"
-  },
-  {
     "name": "JunaCat",
     "twitchName": "junacattv"
   },
