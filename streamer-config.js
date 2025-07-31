@@ -820,16 +820,8 @@ const streamerList = [
     "twitchName": "jaimyleejaxen"
   },
   {
-    "name": "Aku",
-    "twitchName": "akustreamz"
-  },
-  {
     "name": "Micangelus",
     "twitchName": "micangelus"
-  },
-  {
-    "name": "OGSavageTTV",
-    "twitchName": "ogsavagettv"
   },
   {
     "name": "JunaCat",
@@ -854,5 +846,25 @@ const streamerList = [
   {
     "name": "DomiiBoZZ",
     "twitchName": "domiibozz"
+  },
+  {
+    "name": "lulukannalles",
+    "twitchName": "lulukannalles"
+  },
+  {
+    "name": "schischua",
+    "twitchName": "schischua"
+  },
+  {
+    "name": "Yuki",
+    "twitchName": "yukiimashiro"
+  },
+  {
+    "name": "OGSavageTTV",
+    "twitchName": "ogsavagettv"
+  },
+  {
+    "name": "AKUstreamz",
+    "twitchName": "akustreamz"
   }
 ];
