@@ -400,10 +400,6 @@ const streamerList = [
     "twitchName": "leylaaa1994"
   },
   {
-    "name": "dietays_tw",
-    "twitchName": "dietays_tw"
-  },
-  {
     "name": "GinoCampino85",
     "twitchName": "ginocampino85"
   },
@@ -482,10 +478,6 @@ const streamerList = [
   {
     "name": "Halbinho91",
     "twitchName": "halbinho91"
-  },
-  {
-    "name": "Nikos_q",
-    "twitchName": "nikos_q"
   },
   {
     "name": "1mahmuud",
