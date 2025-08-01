@@ -176,10 +176,6 @@ const streamerList = [
     "twitchName": "neunzigprozent_"
   },
   {
-    "name": "Cruznetic",
-    "twitchName": "cruznetic"
-  },
-  {
     "name": "jvblestreamt",
     "twitchName": "jvblestreamt"
   },
