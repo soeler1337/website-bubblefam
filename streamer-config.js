@@ -842,5 +842,9 @@ const streamerList = [
   {
     "name": "AKUstreamz",
     "twitchName": "akustreamz"
+  },
+  {
+    "name": "Ziya",
+    "twitchName": "ziyela"
   }
 ];
