@@ -484,10 +484,6 @@ const streamerList = [
     "twitchName": "sultan_pk"
   },
   {
-    "name": "DzeyDzo",
-    "twitchName": "dzeydzo"
-  },
-  {
     "name": "2beta9",
     "twitchName": "2beta9"
   },
