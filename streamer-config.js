@@ -748,10 +748,6 @@ const streamerList = [
     "twitchName": "kng_serkan"
   },
   {
-    "name": "SmittyMenJackson",
-    "twitchName": "smittymenjackson"
-  },
-  {
     "name": "monkaydee",
     "twitchName": "monkaydee"
   },
