@@ -846,5 +846,13 @@ const streamerList = [
   {
     "name": "Ziya",
     "twitchName": "ziyela"
+  },
+  {
+    "name": "verdrehte_hand",
+    "twitchName": "verdrehte_hand"
+  },
+  {
+    "name": "Liiciiouzz",
+    "twitchName": "liiciiouzz"
   }
 ];
