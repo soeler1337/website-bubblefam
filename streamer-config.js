@@ -492,10 +492,6 @@ const streamerList = [
     "twitchName": "macchinista_kk"
   },
   {
-    "name": "itzsympathyy",
-    "twitchName": "itzsympathyy"
-  },
-  {
     "name": "wolfhealy",
     "twitchName": "wolfhealy"
   },
