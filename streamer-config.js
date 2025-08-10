@@ -870,5 +870,9 @@ const streamerList = [
   {
     "name": "itsrexxen",
     "twitchName": "itsrexxen"
+  },
+  {
+    "name": "Rehleiin",
+    "twitchName": "rehleiinstreams"
   }
 ];
