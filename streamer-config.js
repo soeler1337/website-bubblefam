@@ -140,10 +140,6 @@ const streamerList = [
     "twitchName": "adrixn777_"
   },
   {
-    "name": "christinkamatwitchNamea",
-    "twitchName": "christinkamatwitchNamea"
-  },
-  {
     "name": "brumefeelings",
     "twitchName": "brumefeelings"
   },
@@ -356,10 +352,6 @@ const streamerList = [
     "twitchName": "eyjulien"
   },
   {
-    "name": "BigFudge_TV_",
-    "twitchName": "bigfudge_tv_"
-  },
-  {
     "name": "Queen_Ling_Ling",
     "twitchName": "queen_ling_ling"
   },
@@ -460,10 +452,6 @@ const streamerList = [
     "twitchName": "ttigerv"
   },
   {
-    "name": "zpreze",
-    "twitchName": "zpreze"
-  },
-  {
     "name": "DonalDuckTV",
     "twitchName": "donalducktv"
   },
@@ -518,10 +506,6 @@ const streamerList = [
   {
     "name": "dzenoZH",
     "twitchName": "dzeno_zh"
-  },
-  {
-    "name": "BellNoire",
-    "twitchName": "bellnoire"
   },
   {
     "name": "GolDErkay",
@@ -666,10 +650,6 @@ const streamerList = [
   {
     "name": "Mufasa60",
     "twitchName": "mufasa60"
-  },
-  {
-    "name": "driniunique",
-    "twitchName": "driniunique"
   },
   {
     "name": "Toodaloo91",
