@@ -188,10 +188,6 @@ const streamerList = [
     "twitchName": "zitronitoni"
   },
   {
-    "name": "dennkste",
-    "twitchName": "dennkste"
-  },
-  {
     "name": "frechhdachs",
     "twitchName": "frechhdachs"
   },
@@ -656,10 +652,6 @@ const streamerList = [
     "twitchName": "toodaloo91"
   },
   {
-    "name": "hartGezockt",
-    "twitchName": "hartGezockt"
-  },
-  {
     "name": "Marineli_TV",
     "twitchName": "marineli_tv"
   },
@@ -862,5 +854,17 @@ const streamerList = [
   {
     "name": "onlypeachy",
     "twitchName": "onlypeachy"
+  },
+  {
+    "name": "samir11219",
+    "twitchName": "samir11219"
+  },
+  {
+    "name": "solea96",
+    "twitchName": "solea96"
+  },
+  {
+    "name": "einfachhades",
+    "twitchName": "einfachhades"
   }
 ];
