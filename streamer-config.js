@@ -866,5 +866,9 @@ const streamerList = [
   {
     "name": "einfachhades",
     "twitchName": "einfachhades"
+  },
+  {
+    "name": "Määx",
+    "twitchName": "msapplepieee"
   }
 ];
