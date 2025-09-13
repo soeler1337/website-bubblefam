@@ -866,5 +866,13 @@ const streamerList = [
   {
     "name": "einfachhades",
     "twitchName": "einfachhades"
+  },
+  {
+    "name": "freddy_knox",
+    "twitchName": "freddy_knox"
+  },
+  {
+    "name": "denoachi",
+    "twitchName": "denoachi"
   }
 ];
