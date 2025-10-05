@@ -80,10 +80,6 @@ const streamerList = [
     "twitchName": "grannatapfel"
   },
   {
-    "name": "Sarahnokumo",
-    "twitchName": "sarahnokumo"
-  },
-  {
     "name": "funkyplay44",
     "twitchName": "funkyplay44"
   },
