@@ -30,6 +30,9 @@ async function loadStatus() {
   table.innerHTML = '';
   streamerList.forEach(s => {
     const username = s.twitchName.toLowerCase().split('?')[0];
+	const currentKW = getCalendarWeek();
+	const rdwList = rdwByWeek[currentKW] || [];
+	const isRDW = rdwList.includes(username);
     const live = liveMap[username];
     const tr = document.createElement('tr');
     tr.className = live ? 'online' : 'offline';
@@ -38,10 +41,14 @@ async function loadStatus() {
       <td>${username}</td>
       <td>${live ? live.title : ''}</td>
       <td>${live ? live.game_name : ''}</td>
+	  <td>${isRDW ? "⭐ RDW" : ""}</td>
       <td><a class="live-link" href="https://www.twitch.tv/${username}" target="_blank">Twitch</a></td>
     `;
+	if (isRDW) tr.classList.add("rdw-highlight");
     table.appendChild(tr);
   });
+
+
   sortTable(0);
 }
 
@@ -53,6 +60,7 @@ function filterTable() {
     const text = row.textContent.toLowerCase();
     row.style.display = text.includes(input) ? "" : "none";
   }
+  sortTable(0);
 }
 
 function sortTable(n) {
@@ -85,6 +93,15 @@ function sortTable(n) {
     }
   }
 }
+function getCalendarWeek() {
+  const date = new Date();
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+}
+
 function showPopup() {
   const onlineRows = document.querySelectorAll('tr.online');
   if (onlineRows.length === 0) {
@@ -190,6 +207,30 @@ function showPopup() {
     [...selectedRows].forEach(url => window.open(url, '_blank'));
     document.body.removeChild(overlay);
   };
+}
+
+function filterRDW() {
+  const currentKW = getCalendarWeek();
+  const rdwList = rdwByWeek[currentKW] || [];
+
+  const rows = document.getElementById("streamer-table").getElementsByTagName("tr");
+
+  for (let row of rows) {
+    const nameCell = row.getElementsByTagName("td")[1];
+    if (!nameCell) continue;
+
+    const username = nameCell.textContent.trim().toLowerCase();
+    row.style.display = rdwList.includes(username) ? "" : "none";
+  }
+  sortTable(0);
+}
+
+function clearRDWFilter() {
+  const rows = document.getElementById("streamer-table").getElementsByTagName("tr");
+  for (let row of rows) {
+    row.style.display = "";
+  }
+  sortTable(0);
 }
 
 

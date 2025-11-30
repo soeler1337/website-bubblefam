@@ -51,7 +51,6 @@
       font-size: 1rem;
       border-radius: 8px;
       cursor: pointer;
-      margin: 0 auto 1.5rem;
       display: block;
       color: var(--dark-purple);
       font-weight: bold;
@@ -252,8 +251,8 @@
 	.button-row button,
 	.button-row input[type="text"] {
 	  flex: 1 1 auto;
-	  min-width: 180px;
-	  max-width: 300px;
+	  min-width: 160px;
+	  max-width: 160px;
 	}
 	
 	.popup-stream-entry:hover {
@@ -316,3 +315,21 @@
 	  background-color: #5fcbc9;
 	  color: #fff;
 	}
+	.rdw-highlight td {
+		background-color: var(--thulian-pink) !important; /* orchid pink */
+		color: var(--text-light) !important;
+		font-weight: bold;
+	}
+	.filter-group {
+		display: flex;
+		flex-direction: column;  /* Buttons untereinander */
+		gap: 0.5rem;
+		align-items: stretch;    /* gleiche Breite */
+	}
+	.filter-group button {
+		width: 160px;            /* feste Breite für beide */
+		min-width: 160px;
+		max-width: 160px;
+		margin: 0;               /* verhindert Seitwärtsverschiebung */
+	}
+	

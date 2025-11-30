@@ -1,3 +1,10 @@
+const rdwByWeek = {
+  48: ["itsvolly", "nepitajme"],
+  49: ["Cenk46__","xgurbetg"],
+  50: ["junacattv","naokilaif"],
+  51: [],
+  52: []
+};
 const streamerList = [
   {
     "name": "Soeler",

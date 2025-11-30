@@ -19,6 +19,10 @@
 		<input type="text" id="searchInput" placeholder="Suche nach Name, Titel oder Spiel..." onkeyup="filterTable()">
 		<div class="button-row">
 			<button onclick="loadStatus()">Status aktualisieren</button>
+			<div class="filter-group">
+				<button onclick="filterRDW()">RDW anzeigen</button>
+				<button onclick="clearRDWFilter()">Alle anzeigen</button>
+			</div>
 			<button onclick="showPopup()">Streams auswählen & lurken</button>
 		</div>
 	</div>
@@ -32,11 +36,12 @@
 			<th onclick="sortTable(1)">Name</th>
 			<th onclick="sortTable(2)">Stream-Titel</th>
 			<th onclick="sortTable(3)">Kategorie</th>
+			<th onclick="sortTable(4)">RDW</th>
 			<th>Link</th>
 		  </tr>
 		</thead>
 		<tbody id="streamer-table">
-		  <tr><td colspan="5">Bitte aktualisieren...</td></tr>
+		  <tr><td colspan="6">Bitte aktualisieren...</td></tr>
 		</tbody>
 	  </table>
   </div>
