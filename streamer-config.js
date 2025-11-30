@@ -867,7 +867,15 @@ const streamerList = [
     "twitchName": "denoachi"
   },
   {
-    "name": "kitchenfreaks",
-    "twitchName": "kitchenfreaks"
+    "name": "byaygr",
+    "twitchName": "byaygr"
+  },
+  {
+    "name": "ravy_fps",
+    "twitchName": "ravy_fps"
+  },
+  {
+    "name": "moosmanntv",
+    "twitchName": "moosmanntv"
   }
 ];
