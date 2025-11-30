@@ -43,10 +43,6 @@ const streamerList = [
     "twitchName": "pokeeebooo"
   },
   {
-    "name": "Flexabi",
-    "twitchName": "flexabi"
-  },
-  {
     "name": "Fred_Inc",
     "twitchName": "fred_inc"
   },
@@ -85,10 +81,6 @@ const streamerList = [
   {
     "name": "grannatapfel",
     "twitchName": "grannatapfel"
-  },
-  {
-    "name": "Sarahnokumo",
-    "twitchName": "sarahnokumo"
   },
   {
     "name": "funkyplay44",
@@ -741,14 +733,6 @@ const streamerList = [
   {
     "name": "darylnbd",
     "twitchName": "darylnbd"
-  },
-  {
-    "name": "Fulcrum864",
-    "twitchName": "fulcrum864"
-  },
-  {
-    "name": "gianpier_cerza",
-    "twitchName": "gianpier_cerza"
   },
   {
     "name": "Gol_D_Ibo47",
