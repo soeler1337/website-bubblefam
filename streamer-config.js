@@ -1,6 +1,6 @@
 const rdwByWeek = {
   48: ["itsvolly", "nepitajme"],
-  49: ["Cenk46__","xgurbetg"],
+  49: ["cenk46__","xgurbetg"],
   50: ["junacattv","naokilaif"],
   51: [],
   52: []
@@ -268,7 +268,7 @@ const streamerList = [
   },
   {
     "name": "cenk46__",
-    "twitchName": "Cenk46__"
+    "twitchName": "cenk46__"
   },
   {
     "name": "DrPohli",
