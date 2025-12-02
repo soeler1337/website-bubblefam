@@ -67,10 +67,6 @@ const streamerList = [
     "twitchName": "n4cht4r4"
   },
   {
-    "name": "froschlee",
-    "twitchName": "froschlee"
-  },
-  {
     "name": "onlyisy",
     "twitchName": "onlyisy"
   },
