@@ -571,10 +571,6 @@ const streamerList = [
     "twitchName": "lizzy_gamingz"
   },
   {
-    "name": "ashineko",
-    "twitchName": "ashineko"
-  },
-  {
     "name": "MrBigMik3",
     "twitchName": "mrbigmik3"
   },
