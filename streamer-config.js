@@ -327,10 +327,6 @@ const streamerList = [
     "twitchName": "therealmo24"
   },
   {
-    "name": "Randomhero_Alex",
-    "twitchName": "randomhero_alex"
-  },
-  {
     "name": "minhlee__",
     "twitchName": "minhlee__"
   },
@@ -453,10 +449,6 @@ const streamerList = [
   {
     "name": "Halbinho91",
     "twitchName": "halbinho91"
-  },
-  {
-    "name": "1mahmuud",
-    "twitchName": "1mahmuud"
   },
   {
     "name": "sultan_pk",
