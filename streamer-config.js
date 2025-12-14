@@ -691,7 +691,7 @@ const streamerList = [
     "twitchName": "junacattv"
   },
   {
-    "name": "ADDN ",
+    "name": "ADDN",
     "twitchName": "allesdennochnix"
   },
   {
