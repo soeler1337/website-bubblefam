@@ -63,10 +63,6 @@ const streamerList = [
     "twitchName": "ausmpott"
   },
   {
-    "name": "N4cht4r4",
-    "twitchName": "n4cht4r4"
-  },
-  {
     "name": "onlyisy",
     "twitchName": "onlyisy"
   },
@@ -125,10 +121,6 @@ const streamerList = [
   {
     "name": "nerdshit",
     "twitchName": "nerdshit"
-  },
-  {
-    "name": "Cano_Goat",
-    "twitchName": "cano_goat"
   },
   {
     "name": "adrixn777_",
@@ -341,10 +333,6 @@ const streamerList = [
   {
     "name": "Queen_Ling_Ling",
     "twitchName": "queen_ling_ling"
-  },
-  {
-    "name": "CarlitoFernandez69",
-    "twitchName": "carlitofernandez69"
   },
   {
     "name": "callmetorii",
@@ -651,10 +639,6 @@ const streamerList = [
     "twitchName": "micangelus"
   },
   {
-    "name": "zTimoTV",
-    "twitchName": "ztimotv"
-  },
-  {
     "name": "Fxcuso",
     "twitchName": "fxcuso"
   },
@@ -789,10 +773,6 @@ const streamerList = [
   {
     "name": "Ziya",
     "twitchName": "ziyela"
-  },
-  {
-    "name": "verdrehte_hand",
-    "twitchName": "verdrehte_hand"
   },
   {
     "name": "Liiciiouzz",
