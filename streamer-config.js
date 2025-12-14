@@ -71,10 +71,6 @@ const streamerList = [
     "twitchName": "lm_streams"
   },
   {
-    "name": "grannatapfel",
-    "twitchName": "grannatapfel"
-  },
-  {
     "name": "funkyplay44",
     "twitchName": "funkyplay44"
   },
@@ -91,10 +87,6 @@ const streamerList = [
     "twitchName": "hardregss"
   },
   {
-    "name": "Jaurés",
-    "twitchName": "jaures17"
-  },
-  {
     "name": "jassiegal",
     "twitchName": "jassiegal"
   },
@@ -109,10 +101,6 @@ const streamerList = [
   {
     "name": "Dronna_Blhuto",
     "twitchName": "dronna_blhuto"
-  },
-  {
-    "name": "DreeyLIVE",
-    "twitchName": "dreeylive"
   },
   {
     "name": "nerdshit",
@@ -427,10 +415,6 @@ const streamerList = [
     "twitchName": "sultan_pk"
   },
   {
-    "name": "2beta9",
-    "twitchName": "2beta9"
-  },
-  {
     "name": "Macchinista_kk",
     "twitchName": "macchinista_kk"
   },
@@ -445,10 +429,6 @@ const streamerList = [
   {
     "name": "Beksreaper",
     "twitchName": "beksreaper"
-  },
-  {
-    "name": "rokstarna",
-    "twitchName": "rokstarna"
   },
   {
     "name": "SweetAngel",
@@ -707,10 +687,6 @@ const streamerList = [
     "twitchName": "timmingerx"
   },
   {
-    "name": "jaimyleejaxen ",
-    "twitchName": "jaimyleejaxen"
-  },
-  {
     "name": "JunaCat",
     "twitchName": "junacattv"
   },
@@ -751,10 +727,6 @@ const streamerList = [
     "twitchName": "akustreamz"
   },
   {
-    "name": "Ziya",
-    "twitchName": "ziyela"
-  },
-  {
     "name": "Liiciiouzz",
     "twitchName": "liiciiouzz"
   },
@@ -773,10 +745,6 @@ const streamerList = [
   {
     "name": "apndnd",
     "twitchName": "apndnd"
-  },
-  {
-    "name": "itsrexxen",
-    "twitchName": "itsrexxen"
   },
   {
     "name": "Rehleiin",
@@ -821,5 +789,17 @@ const streamerList = [
   {
     "name": "moosmanntv",
     "twitchName": "moosmanntv"
+  },
+  {
+    "name": "christinkamalinka",
+    "twitchName": "christinkamalinka"
+  },
+  {
+    "name": "Ziyela",
+    "twitchName": "ziyela"
+  },
+  {
+    "name": "msapplepiee",
+    "twitchName": "msapplepiee"
   }
 ];
