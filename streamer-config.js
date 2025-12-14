@@ -79,10 +79,6 @@ const streamerList = [
     "twitchName": "funkyplay44"
   },
   {
-    "name": "mocientia",
-    "twitchName": "mocientia"
-  },
-  {
     "name": "AmigoTV",
     "twitchName": "AmigoTV"
   },
@@ -167,10 +163,6 @@ const streamerList = [
     "twitchName": "naokilaif"
   },
   {
-    "name": "og_1997h",
-    "twitchName": "og_1997h"
-  },
-  {
     "name": "zitronitoni",
     "twitchName": "zitronitoni"
   },
@@ -203,10 +195,6 @@ const streamerList = [
     "twitchName": "ninsida"
   },
   {
-    "name": "MikailDayi_",
-    "twitchName": "mikaildayi_"
-  },
-  {
     "name": "Ramic14",
     "twitchName": "RamiC14"
   },
@@ -225,10 +213,6 @@ const streamerList = [
   {
     "name": "Uncleqral",
     "twitchName": "uncleqral"
-  },
-  {
-    "name": "fvllspeed",
-    "twitchName": "fvllspeed"
   },
   {
     "name": "headhunt3er",
@@ -745,10 +729,6 @@ const streamerList = [
   {
     "name": "leone_x3",
     "twitchName": "leone_x3"
-  },
-  {
-    "name": "DomiiBoZZ",
-    "twitchName": "domiibozz"
   },
   {
     "name": "lulukannalles",
