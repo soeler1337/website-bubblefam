@@ -3,7 +3,7 @@ const rdwByWeek = {
   49: ["cenk46__","xgurbetg"],
   50: ["junacattv","naokilaif"],
   51: ["realblizzardtv","amigotv"],
-  52: []
+  52: ["ravy_fps","queen_ling_ling"]
 };
 const streamerList = [
   {
