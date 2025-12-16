@@ -50,7 +50,7 @@ const rdwByWeek = {
   49: ["cenk46__","xgurbetg"],
   50: ["junacattv","naokilaif"],
   51: ["realblizzardtv","amigotv"],
-  52: ["ravy_fps","queen_ling_ling"]
+  52: ["ravy_fps","x3_leyla"]
 };
 const streamerList = [
   {
@@ -379,7 +379,7 @@ const streamerList = [
   },
   {
     "name": "leylaaa1994",
-    "twitchName": "leylaaa1994"
+    "twitchName": "x3_leyla"
   },
   {
     "name": "GinoCampino85",
