@@ -546,8 +546,8 @@ const streamerList = [
     "twitchName": "tayo_rulo"
   },
   {
-    "name": "der_maiki",
-    "twitchName": "der_maiki"
+    "name": "JustMaiki",
+    "twitchName": "justmaiki_tv"
   },
   {
     "name": "NanScha53",
