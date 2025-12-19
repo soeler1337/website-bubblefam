@@ -270,10 +270,6 @@ const streamerList = [
     "twitchName": "notorious_nati"
   },
   {
-    "name": "okanoksn",
-    "twitchName": "okanoksn"
-  },
-  {
     "name": "cenk46__",
     "twitchName": "cenk46__"
   },
