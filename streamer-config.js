@@ -654,10 +654,6 @@ const streamerList = [
     "twitchName": "donkonsole"
   },
   {
-    "name": "derdickealbaner",
-    "twitchName": "derdickealbaner"
-  },
-  {
     "name": "aileen_fiore",
     "twitchName": "aileen_fiore"
   },
