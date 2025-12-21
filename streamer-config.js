@@ -1,5 +1,5 @@
 const rdwByWeek = {
-  1: [],
+  1: ["ttigerv","millesgaminghd"],
   2: [],
   3: [],
   4: [],
