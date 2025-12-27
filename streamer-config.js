@@ -258,10 +258,6 @@ const streamerList = [
     "twitchName": "monalisacom"
   },
   {
-    "name": "ErRoRkIlLeR_TV",
-    "twitchName": "errorkiller_tv"
-  },
-  {
     "name": "maenniee",
     "twitchName": "maenniee"
   },
@@ -828,10 +824,6 @@ const streamerList = [
   {
     "name": "moosmanntv",
     "twitchName": "moosmanntv"
-  },
-  {
-    "name": "christinkamalinka",
-    "twitchName": "christinkamalinka"
   },
   {
     "name": "Ziyela",
