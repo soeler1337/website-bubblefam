@@ -59,7 +59,7 @@ const streamerList = [
   },
   {
     "name": "GorillaJoe82",
-    "twitchName": "gorillajoe82"
+    "twitchName": "xgorillajoe"
   },
   {
     "name": "xAjdiin",
