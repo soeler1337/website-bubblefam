@@ -1,7 +1,7 @@
 const rdwByWeek = {
   1: ["ttigerv","millesgaminghd"],
   2: ["potaturisu","x_evilara_x"],
-  3: [],
+  3: ["micangelus"],
   4: [],
   5: [],
   6: [],
