@@ -2,7 +2,7 @@ const rdwByWeek = {
   1: ["ttigerv","millesgaminghd"],
   2: ["potaturisu","x_evilara_x"],
   3: ["micangelus"],
-  4: ["realblizzardtv"],
+  4: ["realblizzardtv","onlyisy"],
   5: [],
   6: [],
   7: [],
