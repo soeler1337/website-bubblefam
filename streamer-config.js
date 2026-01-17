@@ -114,10 +114,6 @@ const streamerList = [
     "twitchName": "onlyisy"
   },
   {
-    "name": "LM_Streams",
-    "twitchName": "lm_streams"
-  },
-  {
     "name": "funkyplay44",
     "twitchName": "funkyplay44"
   },
@@ -128,10 +124,6 @@ const streamerList = [
   {
     "name": "D3rSheriff",
     "twitchName": "d3rsheriff"
-  },
-  {
-    "name": "hardregss",
-    "twitchName": "hardregss"
   },
   {
     "name": "jassiegal",
@@ -216,10 +208,6 @@ const streamerList = [
   {
     "name": "itsmaQi",
     "twitchName": "itsmaqi"
-  },
-  {
-    "name": "BuckelNase",
-    "twitchName": "buckelnase"
   },
   {
     "name": "Redfetthead",
@@ -354,10 +342,6 @@ const streamerList = [
     "twitchName": "tarik739"
   },
   {
-    "name": "emirkntmz_",
-    "twitchName": "emirkntmz_"
-  },
-  {
     "name": "M1KEY31",
     "twitchName": "m1key31"
   },
@@ -424,10 +408,6 @@ const streamerList = [
   {
     "name": "eloquenzz",
     "twitchName": "eloquenzz"
-  },
-  {
-    "name": "daddyk1nschu",
-    "twitchName": "daddyk1nschu"
   },
   {
     "name": "Der_Husslon",
@@ -836,5 +816,9 @@ const streamerList = [
   {
     "name": "murphy2022",
     "twitchName": "murphy2022"
+  },
+  {
+    "name": "a4ljoker",
+    "twitchName": "a4ljoker"
   }
 ];
