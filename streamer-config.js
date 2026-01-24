@@ -3,7 +3,7 @@ const rdwByWeek = {
   2: ["potaturisu","x_evilara_x"],
   3: ["micangelus"],
   4: ["realblizzardtv","onlyisy"],
-  5: [],
+  5: ["magiclifestyle","tayo_rulo"],
   6: [],
   7: [],
   8: [],
@@ -166,10 +166,6 @@ const streamerList = [
     "twitchName": "adembaba95"
   },
   {
-    "name": "ugurstreamt",
-    "twitchName": "ugurstreamt"
-  },
-  {
     "name": "MrEdy7",
     "twitchName": "mredy7"
   },
@@ -270,10 +266,6 @@ const streamerList = [
     "twitchName": "thatsgwin"
   },
   {
-    "name": "zzoro_wz",
-    "twitchName": "zzoro_wz"
-  },
-  {
     "name": "mallebuu",
     "twitchName": "mallebuu"
   },
@@ -288,10 +280,6 @@ const streamerList = [
   {
     "name": "thisisjonny04",
     "twitchName": "thisisjonny04"
-  },
-  {
-    "name": "Hecarooo",
-    "twitchName": "hecarooo"
   },
   {
     "name": "LetsStroX",
@@ -312,10 +300,6 @@ const streamerList = [
   {
     "name": "xjonny99xx",
     "twitchName": "xjonny99xx"
-  },
-  {
-    "name": "TheRealMo24",
-    "twitchName": "therealmo24"
   },
   {
     "name": "minhlee__",
@@ -420,10 +404,6 @@ const streamerList = [
   {
     "name": "DonalDuckTV",
     "twitchName": "donalducktv"
-  },
-  {
-    "name": "McMaiFeLd",
-    "twitchName": "mcmaifeld"
   },
   {
     "name": "Halbinho91",
@@ -554,20 +534,12 @@ const streamerList = [
     "twitchName": "auchjulien"
   },
   {
-    "name": "justcarmii",
-    "twitchName": "justcarmii"
-  },
-  {
     "name": "Haramii08",
     "twitchName": "haramii08"
   },
   {
     "name": "nesli0812",
     "twitchName": "nesli0812"
-  },
-  {
-    "name": "xthana_",
-    "twitchName": "xthana_"
   },
   {
     "name": "cat_bytes",
@@ -742,10 +714,6 @@ const streamerList = [
     "twitchName": "akustreamz"
   },
   {
-    "name": "Liiciiouzz",
-    "twitchName": "liiciiouzz"
-  },
-  {
     "name": "PhilDeJong",
     "twitchName": "phildejong"
   },
@@ -784,14 +752,6 @@ const streamerList = [
   {
     "name": "einfachhades",
     "twitchName": "einfachhades"
-  },
-  {
-    "name": "freddy_knox",
-    "twitchName": "freddy_knox"
-  },
-  {
-    "name": "denoachi",
-    "twitchName": "denoachi"
   },
   {
     "name": "byaygr",
