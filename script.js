@@ -18,7 +18,7 @@ async function fetchStreams() {
 
 async function loadStatus() {
   const table = document.getElementById('streamer-table');
-  table.innerHTML = '<tr><td colspan="5">Lade...</td></tr>';
+  table.innerHTML = '<tr><td colspan="6">Lade...</td></tr>';
   
   await fetchStreams();
 
@@ -234,6 +234,42 @@ function clearRDWFilter() {
 }
 
 
+// --- SPA Router (Hash) ---
+function setActiveNav(hash) {
+  document.querySelectorAll('[data-nav]').forEach(a => a.classList.remove('active'));
+  const active = document.querySelector(`[data-nav][href="${hash}"]`);
+  if (active) active.classList.add('active');
+}
 
-setInterval(loadStatus, 300000);
-window.addEventListener('DOMContentLoaded', loadStatus);
+function showView(viewName) {
+  document.querySelectorAll('[data-view]').forEach(v => {
+    v.hidden = v.getAttribute('data-view') !== viewName;
+  });
+}
+
+function route() {
+  const hash = location.hash || '#/';
+  const view =
+    hash === '#/' ? 'home' :
+    hash === '#/members' ? 'members' :
+    hash === '#/wiki' ? 'wiki' :
+    hash === '#/profile' ? 'profile' :
+    hash.startsWith('#/auth') ? 'auth' :
+    'home';
+
+  setActiveNav(view === 'home' ? '#/' : `#/${view}`);
+  showView(view);
+
+  // Only auto-refresh the table on the home view
+  if (view === 'home') {
+    loadStatus();
+  }
+}
+
+// Refresh in the background, but only update UI when on home
+setInterval(() => {
+  if ((location.hash || '#/') === '#/') loadStatus();
+}, 300000);
+
+window.addEventListener('hashchange', route);
+window.addEventListener('DOMContentLoaded', route);
