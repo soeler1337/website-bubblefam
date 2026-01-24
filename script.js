@@ -1,7 +1,6 @@
 /* BubbleFam SPA + Live Dashboard + Supabase Auth (Twitch) */
 
 let allStreams = [];
-let liveAvatarMap = {};
 let homeInterval = null;
 
 // --- Config helpers (compat with streamer-config.js using const/let) ---
@@ -62,61 +61,34 @@ async function fetchStreams() {
 
 async function loadStatus() {
   const table = document.getElementById('streamer-table');
-  if (table) {
-    table.innerHTML = '<tr><td colspan="6">Lade…</td></tr>';
-  }
+  if (!table) return;
+  table.innerHTML = '<tr><td colspan="6">Lade...</td></tr>';
 
   await fetchStreams();
-
-  // Try to resolve avatars for live users (approved members).
-  try {
-    const logins = (allStreams || []).map(s => s && s.user_login).filter(Boolean);
-    liveAvatarMap = await fetchApprovedAvatarMap(logins);
-  } catch (e) { /* ignore */ }
-
-  // Always keep the carousel in sync (Home)
   renderLiveCarousel(allStreams);
 
-  // Table only exists/visible in Mitglieder
-  if (!table) return;
-
   const liveMap = {};
-  (allStreams || []).forEach(s => {
-    if (!s || !s.user_login) return;
-    liveMap[String(s.user_login).toLowerCase()] = s;
-  });
-
-  const currentKW = getCalendarWeek();
-  const rdwByWeek = getRdwByWeek() || {};
-  const rdwList = (rdwByWeek[currentKW] || []).map(x => String(x).toLowerCase());
+  allStreams.forEach(s => { liveMap[s.user_login.toLowerCase()] = s; });
 
   table.innerHTML = '';
   (getStreamerList()).forEach(s => {
-    const username = String(s.twitchName || '').toLowerCase().split('?')[0];
-    if (!username) return;
-
-    const live = liveMap[username];
+    const username = s.twitchName.toLowerCase().split('?')[0];
+    const currentKW = getCalendarWeek();
+    const rdwList = (getRdwByWeek() && getRdwByWeek()[currentKW]) ? getRdwByWeek()[currentKW] : [];
     const isRDW = rdwList.includes(username);
 
+    const live = liveMap[username];
     const tr = document.createElement('tr');
-    tr.className = (live ? 'online' : 'offline') + ' selectable-row';
-    if (isRDW) tr.classList.add('rdw-highlight');
-
+    tr.className = live ? 'online' : 'offline';
     tr.innerHTML = `
       <td><span class="status-dot ${live ? 'online-dot' : 'offline-dot'}"></span>${live ? 'Online' : 'Offline'}</td>
-      <td>${escapeHtml(username)}</td>
+      <td>${username}</td>
       <td>${live ? escapeHtml(live.title) : ''}</td>
       <td>${live ? escapeHtml(live.game_name) : ''}</td>
       <td>${isRDW ? "⭐ RDW" : ""}</td>
       <td><a class="live-link" href="https://www.twitch.tv/${username}" target="_blank" rel="noopener">Twitch</a></td>
     `;
-
-    tr.addEventListener('click', (ev) => {
-      const a = ev.target && ev.target.closest ? ev.target.closest('a') : null;
-      if (a) return;
-      openMemberModal(username);
-    });
-
+    if (isRDW) tr.classList.add("rdw-highlight");
     table.appendChild(tr);
   });
 
@@ -311,91 +283,76 @@ function isRDWLogin(login) {
   return rdwList.includes(username);
 }
 
-function renderLiveCarousel() {
-  const root = document.getElementById('live-carousel');
+function renderLiveCarousel(streams) {
+  const container = document.getElementById('live-carousel');
   const track = document.getElementById('live-carousel-track');
-  if (!root || !track) return;
+  if (!container || !track) return;
 
-  const currentKW = getCalendarWeek();
-  const rdwList = ((getRdwByWeek() || {})[currentKW] || []).map(x => String(x).toLowerCase());
-
-  const live = (allStreams || [])
+  const live = (streams || []).slice()
     .filter(s => s && s.user_login)
-    .map(s => {
-      const login = String(s.user_login).toLowerCase();
-      const display = s.user_name || s.user_login;
-      const avatarUrl = liveAvatarMap && liveAvatarMap[login] ? String(liveAvatarMap[login]) : '';
-      return {
-        login,
-        display,
-        title: s.title || '',
-        game: s.game_name || '',
-        viewers: Number.isFinite(s.viewer_count) ? s.viewer_count : null,
-        thumb: s.thumbnail_url ? String(s.thumbnail_url).replace('{width}', '440').replace('{height}', '248') : '',
-        isRDW: rdwList.includes(login),
-        avatarUrl
-      };
+    .sort((a,b) => {
+      const ar = isRDWLogin(a.user_login) ? 1 : 0;
+      const br = isRDWLogin(b.user_login) ? 1 : 0;
+      if (ar !== br) return br - ar;
+      return (b.viewer_count || 0) - (a.viewer_count || 0);
     });
 
   if (live.length === 0) {
-    root.hidden = true;
-    track.innerHTML = '';
+    // Show an empty state so the layout doesn't jump when nobody is live.
+    container.hidden = false;
+    track.innerHTML = `<div class="live-empty">Gerade ist niemand live. 😴</div>`;
     return;
   }
 
-  live.sort((a, b) => {
-    if (a.isRDW !== b.isRDW) return a.isRDW ? -1 : 1;
-    const av = a.viewers ?? -1;
-    const bv = b.viewers ?? -1;
-    if (av !== bv) return bv - av;
-    return a.login.localeCompare(b.login);
-  });
+  container.hidden = false;
+  track.innerHTML = "";
 
-  track.innerHTML = '';
-  for (const s of live) {
-    const card = document.createElement('article');
-    card.className = 'live-card';
-    card.setAttribute('role', 'listitem');
+  live.forEach(s => {
+    const login = s.user_login;
+    const title = s.title || "";
+    const game = s.game_name || "";
+    const thumb = (s.thumbnail_url || "").replace("{width}", "480").replace("{height}", "270");
 
-    const initials = getInitials(s.display);
+    const card = document.createElement('div');
+    card.className = "live-card";
+    card.setAttribute("role", "listitem");
+
+    const rdw = isRDWLogin(login);
 
     card.innerHTML = `
-      <a class="live-card-link" href="https://www.twitch.tv/${s.login}" target="_blank" rel="noopener">
-        <div class="live-card-media" ${s.thumb ? `style="background-image:url('${s.thumb}')"` : ''} aria-hidden="true"></div>
-        <div class="live-card-body">
-          <div class="live-card-top">
-            <div class="live-card-name">
-              <span class="live-avatar">${s.avatarUrl ? `<img class="live-avatar-img" src="${escapeHtml(s.avatarUrl)}" alt="" />` : escapeHtml(initials)}</span>
-			  ${s.isRDW ? ' <span class="badge">Raid der Woche</span>' : ''}
-              <span class="live-name-text">${escapeHtml(s.display)}</span>
-            </div>
-            <div class="live-card-meta">${s.viewers != null ? `${s.viewers} 👀` : ''}</div>
-          </div>
-          <div class="live-card-title" title="${escapeHtml(s.title)}">${escapeHtml(s.title)}</div>
-          <div class="live-card-game">${escapeHtml(s.game)}</div>
+      <div class="live-thumb" style="background-image:url('${thumb}')">
+        <div class="live-top">
+          <span class="live-dot">LIVE</span>
+          ${rdw ? '<span class="live-rdw">⭐ RDW</span>' : ''}
         </div>
-      </a>
+      </div>
+      <div class="live-meta">
+        <div class="live-row">
+          <div class="live-avatar" aria-hidden="true">${initialsFromLogin(login)}</div>
+          <div class="live-info">
+            <div class="live-name">${escapeHtml(login)}</div>
+            <div class="live-game">${escapeHtml(game)}</div>
+          </div>
+        </div>
+        <div class="live-title" title="${escapeHtml(title)}">${escapeHtml(title)}</div>
+        <div class="live-actions">
+          <a class="live-link" href="https://www.twitch.tv/${encodeURIComponent(login)}" target="_blank" rel="noopener">Watch</a>
+        </div>
+      </div>
     `;
-
     track.appendChild(card);
-  }
+  });
 
-  root.hidden = false;
-
-  // Wire carousel buttons (desktop)
+  // desktop buttons
   const prev = document.getElementById('live-prev');
   const next = document.getElementById('live-next');
-  const scrollBy = () => Math.max(240, track.clientWidth * 0.9);
-  if (prev && !prev.dataset.wired) {
-    prev.dataset.wired = '1';
-    prev.addEventListener('click', () => track.scrollBy({ left: -scrollBy(), behavior: 'smooth' }));
-  }
-  if (next && !next.dataset.wired) {
-    next.dataset.wired = '1';
-    next.addEventListener('click', () => track.scrollBy({ left: scrollBy(), behavior: 'smooth' }));
+  const scrollAmount = () => Math.max(240, track.clientWidth * 0.85);
+
+  if (prev && next) {
+    prev.onclick = () => track.scrollBy({ left: -scrollAmount(), behavior: "smooth" });
+    next.onclick = () => track.scrollBy({ left: scrollAmount(), behavior: "smooth" });
   }
 }
-
 
 // --- SPA Router ---
 function setActiveNav(hash) {
@@ -412,6 +369,17 @@ function showView(viewName) {
 }
 
 function route() {
+  // OAuth return handling (query-string)
+  const qs = new URLSearchParams(window.location.search || "");
+  if (qs.get('auth') === '1' || qs.get('code')) {
+    showView('auth');
+    if (!route._authHandled) {
+      route._authHandled = true;
+      handleAuthReturn();
+    }
+    return;
+  }
+
   const hash = location.hash || "#/";
   setActiveNav(hash.startsWith("#/") ? (hash.startsWith("#/members") ? "#/members"
     : hash.startsWith("#/wiki") ? "#/wiki"
@@ -431,7 +399,7 @@ function route() {
   if (view === "home") startHomePolling();
   else stopHomePolling();
 
-  if (view === "members") { loadMembersPublic(); loadStatus(); }
+  if (view === "members") loadMembersPublic();
   if (view === "profile") loadProfileView();
   if (view === "auth") handleAuthReturn();
 }
@@ -443,164 +411,6 @@ function startHomePolling() {
     // only refresh if we are still on home
     if ((location.hash || "#/") === "#/") loadStatus();
   }, 5 * 60 * 1000);
-}
-
-
-// --- Member detail modal (public) ---
-function getInitials(name) {
-  const n = String(name || '').trim();
-  if (!n) return '?';
-  const parts = n.split(/\s+/).slice(0, 2);
-  return parts.map(p => (p[0] || '').toUpperCase()).join('') || n[0].toUpperCase();
-}
-
-async function fetchApprovedAvatarMap(logins) {
-  const map = {};
-  const unique = Array.from(new Set((logins || []).map(x => String(x).toLowerCase()))).filter(Boolean);
-  if (!unique.length) return map;
-  if (!sb) return map;
-  try {
-    const { data } = await sb.from('members')
-      .select('twitch_login,avatar_url,status')
-      .in('twitch_login', unique)
-      .eq('status', 'approved');
-    (data || []).forEach(row => {
-      const key = String(row.twitch_login || '').toLowerCase();
-      if (key && row.avatar_url) map[key] = String(row.avatar_url);
-    });
-  } catch (e) {
-    // ignore
-  }
-  return map;
-}
-
-async function openMemberModal(login) {
-  const overlay = document.getElementById('member-modal');
-  const body = document.getElementById('member-modal-body');
-  const title = document.getElementById('member-modal-title');
-  if (!overlay || !body || !title) return;
-
-  const closeBtn = document.getElementById('member-modal-close');
-  const close = () => {
-    overlay.hidden = true;
-    overlay.dataset.open = '';
-  };
-
-  if (!overlay.dataset.wired) {
-    overlay.dataset.wired = '1';
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) close();
-    });
-    closeBtn?.addEventListener('click', close);
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && overlay.dataset.open === '1') close();
-    });
-  }
-
-  overlay.hidden = false;
-  overlay.dataset.open = '1';
-  title.textContent = '@' + login;
-  body.innerHTML = '<div class="muted">Lade…</div>';
-
-  const live = (allStreams || []).find(s => String(s?.user_login || '').toLowerCase() === String(login).toLowerCase()) || null;
-
-  // Public member profile (only if approved)
-  let member = null;
-  let socials = [];
-  let schedule = [];
-
-  try {
-    if (sb) {
-      const { data: m } = await sb.from('members')
-        .select('user_id,twitch_login,display_name,avatar_url,status')
-        .eq('twitch_login', login)
-        .eq('status', 'approved')
-        .maybeSingle();
-      member = m || null;
-
-      if (member?.user_id) {
-        const { data: s1 } = await sb.from('member_socials')
-          .select('platform,url')
-          .eq('user_id', member.user_id)
-          .order('platform', { ascending: true });
-        socials = s1 || [];
-
-        const { data: s2 } = await sb.from('stream_schedule')
-          .select('weekday,start_time,end_time,notes')
-          .eq('user_id', member.user_id)
-          .order('weekday', { ascending: true })
-          .order('start_time', { ascending: true });
-        schedule = s2 || [];
-      }
-    }
-  } catch (e) {
-    // ignore
-  }
-
-  const display = member?.display_name || live?.user_name || login;
-  const avatarUrl = member?.avatar_url || '';
-
-  const liveBox = live ? `
-    <div class="status-box ok">
-      <div class="modal-live-top">
-        <b>LIVE</b>
-        <span class="muted">${Number.isFinite(live.viewer_count) ? `${live.viewer_count} Zuschauer` : ''}</span>
-      </div>
-      <div class="modal-live-title">${escapeHtml(live.title || '')}</div>
-      <div class="muted">${escapeHtml(live.game_name || '')}</div>
-      <a class="live-link" href="https://www.twitch.tv/${login}" target="_blank" rel="noopener">Stream öffnen</a>
-    </div>
-  ` : `
-    <div class="status-box">
-      <div class="muted">Gerade offline.</div>
-      <a class="live-link" href="https://www.twitch.tv/${login}" target="_blank" rel="noopener">Twitch öffnen</a>
-    </div>
-  `;
-
-  const socialsBox = (socials && socials.length) ? `
-    <h3>Socials</h3>
-    <div class="modal-socials">
-      ${socials.map(s => `
-        <a class="pill" href="${escapeHtml(s.url)}" target="_blank" rel="noopener">${escapeHtml(s.platform)}</a>
-      `).join('')}
-    </div>
-  ` : `
-    <h3>Socials</h3>
-    <div class="muted">Noch keine Links hinterlegt.</div>
-  `;
-
-  const scheduleBox = (schedule && schedule.length) ? `
-    <h3>Streamplan</h3>
-    <div class="modal-schedule">
-      ${schedule.map(it => {
-        const day = weekdayLabel(it.weekday);
-        const time = `${it.start_time}${it.end_time ? '–'+it.end_time : ''}`;
-        const notes = it.notes ? `<div class="muted small">${escapeHtml(it.notes)}</div>` : '';
-        return `<div class="list-item"><div><b>${day} ${escapeHtml(time)}</b>${notes}</div></div>`;
-      }).join('')}
-    </div>
-  ` : `
-    <h3>Streamplan</h3>
-    <div class="muted">Noch kein Plan hinterlegt.</div>
-  `;
-
-  const profileHint = member ? '' : '<div class="notice">Für dieses Profil sind noch keine Member-Infos hinterlegt. Sobald die Person eingeloggt + freigeschaltet ist, erscheinen hier Avatar/Socials/Plan.</div>';
-
-  body.innerHTML = `
-    <div class="modal-head">
-      <div class="modal-avatar">
-        ${avatarUrl ? `<img src="${escapeHtml(avatarUrl)}" alt="" />` : `<span>${escapeHtml(getInitials(display))}</span>`}
-      </div>
-      <div>
-        <div class="profile-name">${escapeHtml(display)}</div>
-        <div class="muted small">@${escapeHtml(login)}</div>
-      </div>
-    </div>
-    ${profileHint}
-    ${liveBox}
-    ${socialsBox}
-    ${scheduleBox}
-  `;
 }
 function stopHomePolling() {
   if (homeInterval) {
@@ -627,15 +437,35 @@ function redirectToProfile() {
 }
 
 function getRedirectTo() {
-  // preserve custom domain + potential subpath
+  // IMPORTANT: Use a query-string redirect for OAuth.
+  // Hash routes ("#/auth") don't expose the returned `?code=...` in a way
+  // that supabase-js can reliably detect/exchange.
+  // GitHub Pages still serves index.html for this URL.
   const base = window.location.origin + window.location.pathname;
-  return base + "#/auth";
+  return base + "?auth=1";
 }
 
 async function handleAuthReturn() {
-  // after OAuth redirect, Supabase should have stored session
+  if (!sb) sb = initSupabase();
+  if (!sb) return;
+
+  const params = new URLSearchParams(window.location.search || "");
+  const code = params.get('code');
+
+  // PKCE code exchange
+  if (code) {
+    const { error } = await sb.auth.exchangeCodeForSession(code);
+    if (error) {
+      console.error('OAuth exchange failed:', error);
+    }
+  }
+
   await refreshSession();
-  redirectToProfile();
+
+  // Clean URL (remove ?auth=1&code=...)
+  const base = window.location.origin + window.location.pathname;
+  history.replaceState({}, '', base + '#/profile');
+  route();
 }
 
 async function refreshSession() {
@@ -665,9 +495,21 @@ function extractTwitchMeta(user) {
 async function ensureMemberRow(user) {
   if (!sb) return;
   const { login, display, avatar } = extractTwitchMeta(user);
-  // try insert (will fail if exists)
-  const payload = { user_id: user.id, twitch_login: (login || "").toLowerCase(), display_name: display, avatar_url: avatar };
-  await sb.from("members").insert(payload).select().maybeSingle();
+  const payload = {
+    user_id: user.id,
+    twitch_login: (login || "").toLowerCase(),
+    display_name: display,
+    avatar_url: avatar
+  };
+
+  // Use upsert so repeated logins update avatar/display name.
+  // Ignore errors here (RLS misconfig etc.) so login UI still works.
+  const { error } = await sb
+    .from("members")
+    .upsert(payload, { onConflict: "user_id" })
+    .select()
+    .maybeSingle();
+  if (error) console.warn("ensureMemberRow upsert failed:", error);
 }
 
 async function loadMemberRow() {
@@ -1032,8 +874,4 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   window.addEventListener("hashchange", route);
   route(); // first render
-  document.addEventListener("DOMContentLoaded", () => {
-  const overlay = document.getElementById("member-modal");
-  if (overlay) overlay.hidden = true;
-});
 });
