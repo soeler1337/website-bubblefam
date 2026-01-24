@@ -1,183 +1,253 @@
 <!DOCTYPE html>
-
 <html lang="de">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>BubbleFam Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet"/>
-<link href="112_BF.png" rel="icon" type="image/png"/>
-<script defer="" src="streamer-config.js?v=2.0.0"></script>
-<script defer="" src="script.js?v=2.0.0"></script>
-<link href="style.css?v=2.0.0" rel="stylesheet"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BubbleFam Dashboard</title>
+  <link rel="icon" type="image/png" href="112_BF.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Public config (Supabase URL + anon key) -->
+  <script src="config.public.js"></script>
+
+  <!-- Supabase JS (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+
+  <!-- App scripts -->
+  <script src="streamer-config.js?v=2.1.0" defer></script>
+  <script src="script.js?v=2.1.0" defer></script>
+
+  <link rel="stylesheet" href="style.css?v=2.1.0" />
 </head>
+
 <body>
-<nav aria-label="Hauptnavigation" class="top-nav">
-<a class="nav-brand" href="#/">BubbleFam</a>
-<div class="nav-links">
-<a data-nav="" href="#/">Home</a>
-<a data-nav="" href="#/members">Mitglieder</a>
-<a data-nav="" href="#/wiki">Wissensdatenbank</a>
-<a data-nav="" href="#/profile">Profil <span class="nav-badge" id="nav-auth-badge"></span></a>
-</div>
-</nav>
-<main>
-<!-- HOME VIEW -->
-<section data-view="home">
-<div class="logo-container">
-<img alt="Logo links" class="logo-image logo-left" src="112_BF_big.png"/>
-<div class="header-center">
-<h1>BubbleFam <span class="live">LIVE</span> Status</h1>
-<input id="searchInput" onkeyup="filterTable()" placeholder="Suche nach Name, Titel oder Spiel..." type="text"/>
-<div class="button-row">
-<button onclick="loadStatus()">Status aktualisieren</button>
-<div class="filter-group">
-<button onclick="filterRDW()">RDW anzeigen</button>
-<button onclick="clearRDWFilter()">Alle anzeigen</button>
-</div>
-<button onclick="showPopup()">Streams auswählen &amp; lurken</button>
-</div>
-</div>
-<img alt="Logo rechts" class="logo-image logo-right" src="112_BF_big.png"/>
-</div>
-<!-- Responsive "Jetzt live" carousel (touch-friendly, with optional arrows for desktop) -->
-<div class="live-carousel" hidden="" id="live-carousel">
-<div class="live-carousel-header">
-<h2>Jetzt live</h2>
-<div aria-label="Karussell Navigation" class="live-carousel-controls">
-<button aria-label="Zurück" class="carousel-btn" id="live-prev" type="button">‹</button>
-<button aria-label="Weiter" class="carousel-btn" id="live-next" type="button">›</button>
-</div>
-</div>
-<div class="live-carousel-track" id="live-carousel-track" role="list"></div>
-</div>
-<div class="table-wrapper">
-<table id="streamTable">
-<thead>
-<tr>
-<th onclick="sortTable(0)">Status</th>
-<th onclick="sortTable(1)">Name</th>
-<th onclick="sortTable(2)">Stream-Titel</th>
-<th onclick="sortTable(3)">Kategorie</th>
-<th onclick="sortTable(4)">RDW</th>
-<th>Link</th>
-</tr>
-</thead>
-<tbody id="streamer-table">
-<tr><td colspan="6">Bitte aktualisieren...</td></tr>
-</tbody>
-</table>
-</div>
-</section>
-<!-- MEMBERS VIEW -->
-<section data-view="members" hidden="True">
-<div class="page-card">
-<div class="page-card-header">
-<h2>Mitglieder</h2>
-<div class="page-actions">
-<button class="btn-secondary" id="members-login-btn" type="button">Mit Twitch einloggen</button>
-<button class="btn-secondary" hidden="" id="members-logout-btn" type="button">Logout</button>
-</div>
-</div>
-<p class="muted" id="members-hint">
-    Öffentlich siehst du hier später die Member-Liste. Eingeloggt kannst du (wenn freigeschaltet) dein Profil bearbeiten.
-  </p>
-<div class="status-box" hidden="" id="members-status"></div>
-<div aria-live="polite" class="members-grid" id="members-list">
-<div class="muted">Lade Mitglieder…</div>
-</div>
-<div class="admin-panel" hidden="" id="admin-panel">
-<h3>Admin: Freischaltung</h3>
-<div class="admin-grid">
-<div class="admin-card">
-<h4>Offene Anträge (pending)</h4>
-<div class="admin-list muted" id="admin-pending">Lade…</div>
-</div>
-<div class="admin-card">
-<h4>Whitelist verwalten</h4>
-<div class="admin-row">
-<input id="admin-whitelist-login" placeholder="twitch_login (z.B. soeler1337)" type="text"/>
-<button id="admin-add-whitelist" type="button">Hinzufügen</button>
-</div>
-<div class="admin-list muted" id="admin-whitelist">Lade…</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- WIKI VIEW -->
-<section data-view="wiki" hidden="">
-<div class="page-card">
-<h2>Creator Wissensdatenbank</h2>
-<p>
-          Ziel: Guides wie „OBS Setup“, „Audio richtig einstellen“, „Shorts Workflow“, etc.
-          Erst Read-only, später mit Login + Editor.
-        </p>
-<div class="wiki-grid">
-<div class="wiki-tile">OBS Basics</div>
-<div class="wiki-tile">Audio / Mikro</div>
-<div class="wiki-tile">Scenes &amp; Alerts</div>
-<div class="wiki-tile">Clips &amp; Shorts</div>
-</div>
-</div>
-</section>
-<!-- PROFILE VIEW -->
-<section data-view="profile" hidden="True">
-<div class="page-card">
-<div class="page-card-header">
-<h2>Dein Profil</h2>
-<div class="page-actions">
-<button class="btn-secondary" id="profile-login-btn" type="button">Mit Twitch einloggen</button>
-<button class="btn-secondary" hidden="" id="profile-logout-btn" type="button">Logout</button>
-</div>
-</div>
-<div class="status-box" hidden="" id="profile-status"></div>
-<div id="profile-guest">
-<p class="muted">
-      Logge dich mit Twitch ein, um dein Profil zu verwalten. Wenn du noch nicht freigeschaltet bist, kannst du erstmal nur lesen.
-    </p>
-</div>
-<div hidden="" id="profile-authed">
-<div class="profile-head">
-<div class="profile-avatar" id="profile-avatar">?</div>
-<div class="profile-meta">
-<div class="profile-name" id="profile-display-name">—</div>
-<div class="profile-sub muted" id="profile-login">—</div>
-</div>
-<div class="profile-tags">
-<span class="pill" id="profile-pill-status">—</span>
-<span class="pill" hidden="" id="profile-pill-role">—</span>
-</div>
-</div>
-<form autocomplete="off" class="profile-form" id="profile-form">
-<div class="form-row">
-<label>Anzeige-Name</label>
-<input id="profile-input-display" placeholder="Dein Name" type="text"/>
-</div>
-<div class="form-row">
-<label>Avatar URL (optional)</label>
-<input id="profile-input-avatar" placeholder="https://…" type="text"/>
-</div>
-<div class="form-row">
-<button id="profile-save-btn" type="submit">Speichern</button>
-</div>
-<p class="muted small">
-        Hinweis: Schreibrechte bekommst du erst, wenn du freigeschaltet bist (Whitelist / approved).
-      </p>
-</form>
-</div>
-</div>
-</section>
-<!-- AUTH RETURN VIEW (für OAuth Redirect) -->
-<section data-view="auth" hidden="">
-<div class="page-card">
-<h2>Login…</h2>
-<p id="auth-status">Du wirst gleich weitergeleitet.</p>
-</div>
-</section>
-</main>
-<footer>
-<p> © 2025 <a class="live" href="https://soeler.com" rel="noopener" target="_blank">Soeler</a>. Alle Rechte vorbehalten. </p>
-</footer>
+  <nav class="top-nav" aria-label="Hauptnavigation">
+    <a class="nav-brand" href="#/">
+      <img src="112_BF.png" alt="BubbleFam" class="nav-logo" />
+      <span class="sr-only">BubbleFam</span>
+    </a>
+    <div class="nav-links">
+      <a href="#/" data-nav>Home</a>
+      <a href="#/members" data-nav>Mitglieder</a>
+      <a href="#/wiki" data-nav>Wissensdatenbank</a>
+      <a href="#/profile" data-nav>Profil <span class="nav-badge" id="nav-auth-badge"></span></a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- HOME -->
+    <section data-view="home">
+      <div class="home-header">
+        <h1>BubbleFam <span class="live">LIVE</span> Status</h1>
+      </div>
+
+      <!-- Live carousel -->
+      <div id="live-carousel" class="live-carousel" hidden>
+        <div class="live-carousel-header">
+          <h2>Jetzt live</h2>
+          <div class="live-carousel-controls" aria-label="Karussell Navigation">
+            <button class="carousel-btn" type="button" id="live-prev" aria-label="Zurück">‹</button>
+            <button class="carousel-btn" type="button" id="live-next" aria-label="Weiter">›</button>
+          </div>
+        </div>
+        <div class="live-carousel-track" id="live-carousel-track" role="list"></div>
+      </div>
+	  <div class="button-row-home">
+          <button onclick="showPopup()">Streams auswählen & lurken</button>
+      </div>
+    </section>
+	
+    <!-- MEMBERS -->
+    <section data-view="members" hidden>
+      <div class="page-card">
+        <div class="page-card-header">
+          <h2>Streamer-Liste</h2>
+          <div class="page-actions">
+            <button type="button" onclick="loadStatus()">Aktualisieren</button>
+            <button type="button" class="btn-secondary" onclick="filterRDW()">RDW</button>
+            <button type="button" class="btn-secondary" onclick="clearRDWFilter()">Alle</button>
+          </div>
+        </div>
+
+        <input type="text" id="searchInput" class="home-search" placeholder="Suche nach Name, Titel oder Spiel…" onkeyup="filterTable()">
+
+        <div class="table-wrapper">
+          <table id="streamTable">
+            <thead>
+              <tr>
+                <th onclick="sortTable(0)">Status</th>
+                <th onclick="sortTable(1)">Name</th>
+                <th onclick="sortTable(2)">Stream-Titel</th>
+                <th onclick="sortTable(3)">Kategorie</th>
+                <th onclick="sortTable(4)">RDW</th>
+                <th>Link</th>
+              </tr>
+            </thead>
+            <tbody id="streamer-table">
+              <tr><td colspan="6">Bitte aktualisieren…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="page-card">
+        <h2>Mitglieder</h2>
+        <p class="muted">Öffentlich sichtbar sind nur freigeschaltete Mitglieder.</p>
+        <div id="members-grid" class="member-grid"></div>
+        <div class="notice" id="members-login-hint" hidden>
+          <b>Mitmachen?</b> Logge dich im Profil mit Twitch ein. Du bleibst erstmal <i>pending</i> und wirst dann von uns freigeschaltet.
+        </div>
+      </div>
+
+      <div class="page-card" id="admin-panel" hidden>
+        <h2>Admin</h2>
+        <div class="admin-grid">
+          <div>
+            <h3>Pending Anfragen</h3>
+            <div id="admin-pending"></div>
+          </div>
+          <div>
+            <h3>Whitelist</h3>
+            <form id="whitelist-form" class="inline-form">
+              <input id="whitelist-login" type="text" placeholder="twitch_login (z.B. soeler1337)" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <div id="admin-whitelist"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WIKI -->
+    <section data-view="wiki" hidden>
+      <div class="page-card">
+        <h2>Creator Wissensdatenbank</h2>
+        <p class="muted">Coming soon – hier kommen Guides zu OBS, Stream-Setup, Tipps & Templates rein.</p>
+        <div class="kb-grid">
+          <div class="kb-card">
+            <h3>OBS Basics</h3>
+            <p>Scenes, Sources, Audio, Output – kompakt erklärt.</p>
+          </div>
+          <div class="kb-card">
+            <h3>Audio-Setup</h3>
+            <p>Filter, Gain Staging, Noise Gate – ohne “warum klingt das so?”</p>
+          </div>
+          <div class="kb-card">
+            <h3>Clips & Highlights</h3>
+            <p>Workflow, Hotkeys, Tools – schnell zu Shorts.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROFILE -->
+    <section data-view="profile" hidden>
+      <div class="page-card">
+        <h2>Profil</h2>
+
+        <div id="auth-loading" class="muted">Lade Login-Status…</div>
+
+        <div id="auth-logged-out" hidden>
+          <p>Du bist nicht eingeloggt.</p>
+          <button id="btn-login" type="button">Mit Twitch einloggen</button>
+          <p class="muted small">
+            Hinweis: Nach dem Login bist du ggf. erstmal <b>pending</b>, bis du freigeschaltet wirst.
+          </p>
+        </div>
+
+        <div id="auth-logged-in" hidden>
+          <div class="profile-header">
+            <div class="avatar" id="profile-avatar"></div>
+            <div>
+              <div class="profile-title">
+                <b id="profile-name">—</b>
+                <span class="pill" id="profile-status">—</span>
+                <span class="pill" id="profile-role" hidden>—</span>
+              </div>
+              <div class="muted small" id="profile-login">—</div>
+            </div>
+          </div>
+
+          <div class="button-row">
+            <button id="btn-logout" type="button">Logout</button>
+            <a class="live-link" id="btn-open-twitch" href="#" target="_blank" rel="noopener">Twitch öffnen</a>
+          </div>
+
+          <div id="profile-pending" class="notice" hidden>
+            <b>Du bist noch nicht freigeschaltet.</b> Sobald du approved bist, kannst du hier Socials & Streamplan pflegen.
+          </div>
+
+          <div id="profile-approved" hidden>
+            <h3>Social Links</h3>
+            <form id="social-form" class="inline-form">
+              <select id="social-platform">
+                <option value="youtube">YouTube</option>
+                <option value="instagram">Instagram</option>
+                <option value="tiktok">TikTok</option>
+                <option value="discord">Discord</option>
+                <option value="x">X / Twitter</option>
+                <option value="website">Website</option>
+              </select>
+              <input id="social-url" type="url" placeholder="https://…" />
+              <button type="submit">Speichern</button>
+            </form>
+            <div id="social-list" class="list"></div>
+
+            <h3>Streamplan</h3>
+            <form id="schedule-form" class="schedule-form">
+              <select id="schedule-weekday">
+                <option value="1">Montag</option>
+                <option value="2">Dienstag</option>
+                <option value="3">Mittwoch</option>
+                <option value="4">Donnerstag</option>
+                <option value="5">Freitag</option>
+                <option value="6">Samstag</option>
+                <option value="0">Sonntag</option>
+              </select>
+              <input id="schedule-start" type="time" />
+              <input id="schedule-end" type="time" />
+              <input id="schedule-notes" type="text" placeholder="Optional: Format/Notiz" />
+              <button type="submit">Hinzufügen</button>
+            </form>
+            <div id="schedule-list" class="list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTH RETURN -->
+    <section data-view="auth" hidden>
+      <div class="page-card">
+        <h2>Login…</h2>
+        <p class="muted">Einen Moment – wir schließen den Twitch Login ab.</p>
+      </div>
+    </section>
+
+
+  <!-- Streamer Detail Modal -->
+  <div id="member-modal" class="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="member-modal-title">
+      <div class="modal-header">
+        <div class="modal-title" id="member-modal-title">Streamer</div>
+        <button type="button" class="modal-close" id="member-modal-close" aria-label="Schließen">×</button>
+      </div>
+      <div class="modal-body" id="member-modal-body">
+        <div class="muted">Lade…</div>
+      </div>
+    </div>
+  </div>
+  </main>
+
+  <footer class="footer">
+    <div>© <span id="footer-year"></span> BubbleFam </div>
+    <div class="small">
+      <a href="https://soeler.com" target="_blank" rel="noopener">Soeler</a>
+      • <a href="#/wiki">Wissensdatenbank</a>
+      • <a href="#/members">Mitglieder</a>
+    </div>
+  </footer>
+  <script>
+    (function(){ var y=document.getElementById('footer-year'); if(y) y.textContent = new Date().getFullYear(); })();
+  </script>
 </body>
 </html>
