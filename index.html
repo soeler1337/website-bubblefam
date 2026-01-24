@@ -1,53 +1,183 @@
 <!DOCTYPE html>
+
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BubbleFam Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="112_BF.png">
- 
-  <script src="streamer-config.js?v=1.0.1"></script>
-  <script src="script.js?v=1.0.0"></script>
-  <link rel="stylesheet" href="style.css?v=1.0.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BubbleFam Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="112_BF.png" rel="icon" type="image/png"/>
+<script defer="" src="streamer-config.js?v=1.0.1"></script>
+<script defer="" src="script.js?v=1.0.1"></script>
+<link href="style.css?v=1.0.0" rel="stylesheet"/>
 </head>
 <body>
-  <div class="logo-container">
-    <img src="112_BF_big.png" alt="Logo links" class="logo-image logo-left">
-	<div>
-		<h1>BubbleFam <a class="live">LIVE</a> Status</h1>
-		<input type="text" id="searchInput" placeholder="Suche nach Name, Titel oder Spiel..." onkeyup="filterTable()">
-		<div class="button-row">
-			<button onclick="loadStatus()">Status aktualisieren</button>
-			<div class="filter-group">
-				<button onclick="filterRDW()">RDW anzeigen</button>
-				<button onclick="clearRDWFilter()">Alle anzeigen</button>
-			</div>
-			<button onclick="showPopup()">Streams auswählen & lurken</button>
-		</div>
-	</div>
-    <img src="112_BF_big.png" alt="Logo rechts" class="logo-image logo-right">
-  </div>
-  <div class="table-wrapper">
-	  <table id="streamTable">
-		<thead>
-		  <tr>
-			<th onclick="sortTable(0)">Status</th>
-			<th onclick="sortTable(1)">Name</th>
-			<th onclick="sortTable(2)">Stream-Titel</th>
-			<th onclick="sortTable(3)">Kategorie</th>
-			<th onclick="sortTable(4)">RDW</th>
-			<th>Link</th>
-		  </tr>
-		</thead>
-		<tbody id="streamer-table">
-		  <tr><td colspan="6">Bitte aktualisieren...</td></tr>
-		</tbody>
-	  </table>
-  </div>
-  <footer>
-	<p> &copy; 2026 <a class="live" href="https://soeler.com" target="_blank">Soeler</a>. Alle Rechte vorbehalten. </p>
-  </footer>
-
+<nav aria-label="Hauptnavigation" class="top-nav">
+<a class="nav-brand" href="#/">BubbleFam</a>
+<div class="nav-links">
+<a data-nav="" href="#/">Home</a>
+<a data-nav="" href="#/members">Mitglieder</a>
+<a data-nav="" href="#/wiki">Wissensdatenbank</a>
+<a data-nav="" href="#/profile">Profil <span class="nav-badge" id="nav-auth-badge"></span></a>
+</div>
+</nav>
+<main>
+<!-- HOME VIEW -->
+<section data-view="home">
+<div class="logo-container">
+<img alt="Logo links" class="logo-image logo-left" src="112_BF_big.png"/>
+<div class="header-center">
+<h1>BubbleFam <span class="live">LIVE</span> Status</h1>
+<input id="searchInput" onkeyup="filterTable()" placeholder="Suche nach Name, Titel oder Spiel..." type="text"/>
+<div class="button-row">
+<button onclick="loadStatus()">Status aktualisieren</button>
+<div class="filter-group">
+<button onclick="filterRDW()">RDW anzeigen</button>
+<button onclick="clearRDWFilter()">Alle anzeigen</button>
+</div>
+<button onclick="showPopup()">Streams auswählen &amp; lurken</button>
+</div>
+</div>
+<img alt="Logo rechts" class="logo-image logo-right" src="112_BF_big.png"/>
+</div>
+<!-- Responsive "Jetzt live" carousel (touch-friendly, with optional arrows for desktop) -->
+<div class="live-carousel" hidden="" id="live-carousel">
+<div class="live-carousel-header">
+<h2>Jetzt live</h2>
+<div aria-label="Karussell Navigation" class="live-carousel-controls">
+<button aria-label="Zurück" class="carousel-btn" id="live-prev" type="button">‹</button>
+<button aria-label="Weiter" class="carousel-btn" id="live-next" type="button">›</button>
+</div>
+</div>
+<div class="live-carousel-track" id="live-carousel-track" role="list"></div>
+</div>
+<div class="table-wrapper">
+<table id="streamTable">
+<thead>
+<tr>
+<th onclick="sortTable(0)">Status</th>
+<th onclick="sortTable(1)">Name</th>
+<th onclick="sortTable(2)">Stream-Titel</th>
+<th onclick="sortTable(3)">Kategorie</th>
+<th onclick="sortTable(4)">RDW</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody id="streamer-table">
+<tr><td colspan="6">Bitte aktualisieren...</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- MEMBERS VIEW -->
+<section data-view="members" hidden="True">
+<div class="page-card">
+<div class="page-card-header">
+<h2>Mitglieder</h2>
+<div class="page-actions">
+<button class="btn-secondary" id="members-login-btn" type="button">Mit Twitch einloggen</button>
+<button class="btn-secondary" hidden="" id="members-logout-btn" type="button">Logout</button>
+</div>
+</div>
+<p class="muted" id="members-hint">
+    Öffentlich siehst du hier später die Member-Liste. Eingeloggt kannst du (wenn freigeschaltet) dein Profil bearbeiten.
+  </p>
+<div class="status-box" hidden="" id="members-status"></div>
+<div aria-live="polite" class="members-grid" id="members-list">
+<div class="muted">Lade Mitglieder…</div>
+</div>
+<div class="admin-panel" hidden="" id="admin-panel">
+<h3>Admin: Freischaltung</h3>
+<div class="admin-grid">
+<div class="admin-card">
+<h4>Offene Anträge (pending)</h4>
+<div class="admin-list muted" id="admin-pending">Lade…</div>
+</div>
+<div class="admin-card">
+<h4>Whitelist verwalten</h4>
+<div class="admin-row">
+<input id="admin-whitelist-login" placeholder="twitch_login (z.B. soeler1337)" type="text"/>
+<button id="admin-add-whitelist" type="button">Hinzufügen</button>
+</div>
+<div class="admin-list muted" id="admin-whitelist">Lade…</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- WIKI VIEW -->
+<section data-view="wiki" hidden="">
+<div class="page-card">
+<h2>Creator Wissensdatenbank</h2>
+<p>
+          Ziel: Guides wie „OBS Setup“, „Audio richtig einstellen“, „Shorts Workflow“, etc.
+          Erst Read-only, später mit Login + Editor.
+        </p>
+<div class="wiki-grid">
+<div class="wiki-tile">OBS Basics</div>
+<div class="wiki-tile">Audio / Mikro</div>
+<div class="wiki-tile">Scenes &amp; Alerts</div>
+<div class="wiki-tile">Clips &amp; Shorts</div>
+</div>
+</div>
+</section>
+<!-- PROFILE VIEW -->
+<section data-view="profile" hidden="True">
+<div class="page-card">
+<div class="page-card-header">
+<h2>Dein Profil</h2>
+<div class="page-actions">
+<button class="btn-secondary" id="profile-login-btn" type="button">Mit Twitch einloggen</button>
+<button class="btn-secondary" hidden="" id="profile-logout-btn" type="button">Logout</button>
+</div>
+</div>
+<div class="status-box" hidden="" id="profile-status"></div>
+<div id="profile-guest">
+<p class="muted">
+      Logge dich mit Twitch ein, um dein Profil zu verwalten. Wenn du noch nicht freigeschaltet bist, kannst du erstmal nur lesen.
+    </p>
+</div>
+<div hidden="" id="profile-authed">
+<div class="profile-head">
+<div class="profile-avatar" id="profile-avatar">?</div>
+<div class="profile-meta">
+<div class="profile-name" id="profile-display-name">—</div>
+<div class="profile-sub muted" id="profile-login">—</div>
+</div>
+<div class="profile-tags">
+<span class="pill" id="profile-pill-status">—</span>
+<span class="pill" hidden="" id="profile-pill-role">—</span>
+</div>
+</div>
+<form autocomplete="off" class="profile-form" id="profile-form">
+<div class="form-row">
+<label>Anzeige-Name</label>
+<input id="profile-input-display" placeholder="Dein Name" type="text"/>
+</div>
+<div class="form-row">
+<label>Avatar URL (optional)</label>
+<input id="profile-input-avatar" placeholder="https://…" type="text"/>
+</div>
+<div class="form-row">
+<button id="profile-save-btn" type="submit">Speichern</button>
+</div>
+<p class="muted small">
+        Hinweis: Schreibrechte bekommst du erst, wenn du freigeschaltet bist (Whitelist / approved).
+      </p>
+</form>
+</div>
+</div>
+</section>
+<!-- AUTH RETURN VIEW (für OAuth Redirect) -->
+<section data-view="auth" hidden="">
+<div class="page-card">
+<h2>Login…</h2>
+<p id="auth-status">Du wirst gleich weitergeleitet.</p>
+</div>
+</section>
+</main>
+<footer>
+<p> © 2025 <a class="live" href="https://soeler.com" rel="noopener" target="_blank">Soeler</a>. Alle Rechte vorbehalten. </p>
+</footer>
 </body>
 </html>
