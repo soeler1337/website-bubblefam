@@ -1196,3 +1196,10 @@
     grid-column: auto;
   }
 }
+.social-label{
+  color: var(--text-light) !important;
+}
+
+.social-host{
+  color: rgba(255,255,255,0.72) !important;
+}
