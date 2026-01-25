@@ -1054,7 +1054,7 @@ async function handleOAuthQueryReturn() {
 // --- Boot ---
 window.addEventListener("DOMContentLoaded", async () => {
   sb = initSupabase();
-
+  await handleOAuthQueryReturn();
   // keep session fresh when auth state changes
   if (sb) {
     sb.auth.onAuthStateChange(async () => {
@@ -1069,20 +1069,4 @@ window.addEventListener("DOMContentLoaded", async () => {
   const overlay = document.getElementById("member-modal");
   if (overlay) overlay.hidden = true;
 });
-});
-window.addEventListener("DOMContentLoaded", async () => {
-  sb = initSupabase();
-+  await handleOAuthQueryReturn();
-
-  // keep session fresh when auth state changes
-  if (sb) {
-    sb.auth.onAuthStateChange(async () => {
-      await refreshSession();
-      updateAuthBadge();
-    });
-  }
-
-  window.addEventListener("hashchange", route);
-  route(); // first render
-  ...
 });
