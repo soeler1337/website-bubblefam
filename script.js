@@ -37,7 +37,14 @@ function initSupabase() {
       console.warn("Supabase JS nicht geladen.");
       return null;
     }
-    return window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+	return window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY, {
+		auth: {
+			persistSession: true,
+			autoRefreshToken: true,
+			detectSessionInUrl: true,
+			flowType: "pkce",
+		},
+	});
   } catch (e) {
     console.error("Supabase init error", e);
     return null;
@@ -629,7 +636,7 @@ function redirectToProfile() {
 function getRedirectTo() {
   // preserve custom domain + potential subpath
   const base = window.location.origin + window.location.pathname;
-  return base + "#/auth";
+  return base + "?auth=1";
 }
 
 async function handleAuthReturn() {
@@ -1017,11 +1024,37 @@ async function loadSchedule() {
     wrap.appendChild(row);
   });
 }
+async function handleOAuthQueryReturn() {
+  if (!sb) return;
+
+  const url = new URL(window.location.href);
+  const isAuthReturn = url.searchParams.has("code") || url.searchParams.has("error") || url.searchParams.has("auth");
+  if (!isAuthReturn) return;
+
+  // If we got an OAuth code, exchange it for a session
+  const code = url.searchParams.get("code");
+  if (code) {
+    try {
+      await sb.auth.exchangeCodeForSession(code);
+    } catch (e) {
+      console.warn("exchangeCodeForSession failed", e);
+    }
+  }
+
+  await refreshSession();
+
+  // Clean up URL (remove ?auth=1&code=... etc)
+  url.search = "";
+  history.replaceState({}, document.title, url.toString());
+
+  // Go to profile (so UI updates immediately)
+  location.hash = "#/profile";
+}
 
 // --- Boot ---
 window.addEventListener("DOMContentLoaded", async () => {
   sb = initSupabase();
-
+  await handleOAuthQueryReturn();
   // keep session fresh when auth state changes
   if (sb) {
     sb.auth.onAuthStateChange(async () => {
