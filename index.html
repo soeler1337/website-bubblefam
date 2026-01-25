@@ -15,9 +15,9 @@
 
   <!-- App scripts -->
   <script src="streamer-config.js?v=2.1.0" defer></script>
-  <script src="script.js?v=2.1.6" defer></script>
+  <script src="script.js?v=2.1.7" defer></script>
 
-  <link rel="stylesheet" href="style.css?v=2.1.2" />
+  <link rel="stylesheet" href="style.css?v=2.1.3" />
 </head>
 
 <body>
@@ -156,7 +156,7 @@
         </div>
 
         <div id="auth-logged-in" hidden>
-          <div class="profile-header">
+          <div class="profile-head">
             <div class="avatar" id="profile-avatar"></div>
             <div>
               <div class="profile-title">
@@ -178,46 +178,71 @@
           </div>
 
           <div id="profile-approved" hidden>
-			<h3>Bio</h3>
-			<form id="bio-form" class="stack">
-			  <textarea id="bio-input" rows="4" maxlength="300"
-				placeholder="Kurz was zu dir… (max 300 Zeichen)"></textarea>
-			  <button type="submit">Bio speichern</button>
-			  <div class="muted small" id="bio-hint"></div>
-			</form>
-            <h3>Social Links</h3>
-            <form id="social-form" class="inline-form">
-              <select id="social-platform">
-                <option value="youtube">YouTube</option>
-                <option value="instagram">Instagram</option>
-                <option value="tiktok">TikTok</option>
-                <option value="discord">Discord</option>
-                <option value="x">X / Twitter</option>
-                <option value="website">Website</option>
-              </select>
-              <input id="social-url" type="url" placeholder="https://…" />
-              <button type="submit">Speichern</button>
-            </form>
-            <div id="social-list" class="list"></div>
+			  <div class="profile-grid">
+				<section class="panel">
+				  <div class="panel-head">
+					<h3>Bio</h3>
+					<div class="muted small">max. 300 Zeichen</div>
+				  </div>
 
-            <h3>Streamplan</h3>
-            <form id="schedule-form" class="schedule-form">
-              <select id="schedule-weekday">
-                <option value="1">Montag</option>
-                <option value="2">Dienstag</option>
-                <option value="3">Mittwoch</option>
-                <option value="4">Donnerstag</option>
-                <option value="5">Freitag</option>
-                <option value="6">Samstag</option>
-                <option value="0">Sonntag</option>
-              </select>
-              <input id="schedule-start" type="time" />
-              <input id="schedule-end" type="time" />
-              <input id="schedule-notes" type="text" placeholder="Optional: Format/Notiz" />
-              <button type="submit">Hinzufügen</button>
-            </form>
-            <div id="schedule-list" class="list"></div>
-          </div>
+				  <form id="bio-form" class="stack">
+					<textarea id="bio-input" rows="4" maxlength="300"
+					  placeholder="Kurz was zu dir… (max 300 Zeichen)"></textarea>
+					<div class="button-row">
+					  <button type="submit" class="btn-primary">Bio speichern</button>
+					  <div class="muted small" id="bio-hint"></div>
+					</div>
+				  </form>
+				</section>
+
+				<section class="panel">
+				  <div class="panel-head">
+					<h3>Social Links</h3>
+					<div class="muted small">Links zu deinen Kanälen</div>
+				  </div>
+
+				  <form id="social-form" class="inline-form">
+					<select id="social-platform">
+					  <option value="youtube">YouTube</option>
+					  <option value="instagram">Instagram</option>
+					  <option value="tiktok">TikTok</option>
+					  <option value="discord">Discord</option>
+					  <option value="x">X / Twitter</option>
+					  <option value="website">Website</option>
+					</select>
+					<input id="social-url" type="url" placeholder="https://…" />
+					<button type="submit" class="btn-secondary">Speichern</button>
+				  </form>
+
+				  <div id="social-list" class="list"></div>
+				</section>
+
+				<section class="panel panel--wide">
+				  <div class="panel-head">
+					<h3>Streamplan</h3>
+					<div class="muted small">Zeiten & Notiz</div>
+				  </div>
+
+				  <form id="schedule-form" class="schedule-form">
+					<select id="schedule-weekday">
+					  <option value="1">Montag</option>
+					  <option value="2">Dienstag</option>
+					  <option value="3">Mittwoch</option>
+					  <option value="4">Donnerstag</option>
+					  <option value="5">Freitag</option>
+					  <option value="6">Samstag</option>
+					  <option value="0">Sonntag</option>
+					</select>
+					<input id="schedule-start" type="time" />
+					<input id="schedule-end" type="time" />
+					<input id="schedule-notes" type="text" placeholder="Optional: Format/Notiz" />
+					<button type="submit" class="btn-secondary">Hinzufügen</button>
+				  </form>
+
+				  <div id="schedule-list" class="list"></div>
+				</section>
+			  </div>
+			</div>
         </div>
       </div>
     </section>

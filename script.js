@@ -708,7 +708,14 @@ async function ensureMemberRow(user) {
   const { login, display, avatar } = extractTwitchMeta(user);
   // try insert (will fail if exists)
   const payload = { user_id: user.id, twitch_login: (login || "").toLowerCase(), display_name: display, avatar_url: avatar };
-  await sb.from("members").insert(payload).select().maybeSingle();
+  const { data, error } = await sb
+  .from("members")
+  .upsert(payload, { onConflict: "user_id" })
+  .select("*")
+  .single();
+
+  if (error) throw error;
+  currentMemberRow = data;
 }
 
 async function loadMemberRow() {
@@ -815,7 +822,6 @@ async function loadProfileView() {
   if (approved) {
 	wireBio();
 	await loadBio();
-	wireProfileBasics();
     wireSocials();
     wireSchedule();
     await loadSocials();

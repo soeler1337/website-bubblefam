@@ -1072,3 +1072,68 @@
 .profile-basics input[type="file"] {
   width: 100%;
 }
+/* ===== Profil: professioneller Look ohne JS-Änderungen ===== */
+.profile-grid{
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.panel{
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.14);
+  padding: 14px;
+}
+
+.panel--wide{
+  grid-column: 1 / -1;
+}
+
+.panel-head{
+  display:flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.panel h3{
+  margin: 0;
+}
+
+#bio-input{
+  width: 100%;
+  resize: vertical;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(0,0,0,0.16);
+  color: inherit;
+  outline: none;
+}
+
+#bio-input:focus{
+  border-color: rgba(150,221,220,0.6);
+  box-shadow: 0 0 0 3px rgba(150,221,220,0.18);
+}
+
+.btn-primary{
+  border: 1px solid rgba(150,221,220,0.5);
+  background: rgba(150,221,220,0.18);
+}
+
+.btn-secondary{
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(0,0,0,0.12);
+}
+
+@media (max-width: 900px){
+  .profile-grid{
+    grid-template-columns: 1fr;
+  }
+  .panel--wide{
+    grid-column: auto;
+  }
+}
