@@ -402,6 +402,79 @@ function renderLiveCarousel() {
     next.addEventListener('click', () => track.scrollBy({ left: scrollBy(), behavior: 'smooth' }));
   }
 }
+function wireProfileBasics() {
+  const form = document.getElementById("profile-basics-form");
+  if (!form || form.dataset.wired) return;
+  form.dataset.wired = "1";
+
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    if (!sb || !currentSession?.user) return;
+
+    const hint = document.getElementById("profile-save-hint");
+    if (hint) hint.textContent = "Speichere…";
+
+    const displayName = (document.getElementById("profile-displayname")?.value || "").trim();
+    const file = document.getElementById("profile-avatar-file")?.files?.[0] || null;
+
+    // 1) optional avatar upload
+    let newAvatarUrl = null;
+    if (file) {
+      newAvatarUrl = await uploadAvatarToStorage(file);
+    }
+
+    // 2) update members row (only fields that exist)
+    const patch = {};
+    if (displayName) patch.display_name = displayName;
+    if (newAvatarUrl) patch.avatar_url = newAvatarUrl;
+
+    if (Object.keys(patch).length) {
+      const { error } = await sb.from("members")
+        .update(patch)
+        .eq("user_id", currentSession.user.id);
+
+      if (error) {
+        console.warn(error);
+        if (hint) hint.textContent = "Konnte nicht speichern.";
+        return;
+      }
+    }
+
+    await loadMemberRow();        // refresh currentMemberRow
+    await refreshSession();       // keeps badge consistent
+    await loadProfileView();      // re-render UI
+    if (hint) hint.textContent = "Gespeichert ✅";
+  };
+}
+async function uploadAvatarToStorage(file) {
+  if (!sb || !currentSession?.user) return null;
+
+  // simple validation
+  const maxMB = 2;
+  if (file.size > maxMB * 1024 * 1024) {
+    alert(`Avatar ist zu groß (max ${maxMB}MB).`);
+    return null;
+  }
+
+  const userId = currentSession.user.id;
+  const ext = (file.name.split(".").pop() || "png").toLowerCase();
+  const path = `${userId}.${ext}`;
+
+  // upload (upsert = überschreiben)
+  const { error: upErr } = await sb.storage
+    .from("avatars")
+    .upload(path, file, { upsert: true, contentType: file.type });
+
+  if (upErr) {
+    console.warn(upErr);
+    alert("Upload fehlgeschlagen. (Storage Policy / Bucket?)");
+    return null;
+  }
+
+  // public URL
+  const { data } = sb.storage.from("avatars").getPublicUrl(path);
+  return data?.publicUrl || null;
+}
 
 
 // --- SPA Router ---
@@ -761,7 +834,9 @@ async function loadProfileView() {
     roleEl.textContent = role === "admin" ? "admin" : "";
   }
 
-  setAvatar(document.getElementById("profile-avatar"), meta.avatar, initialsFromLogin(meta.login));
+  const preferredAvatar = currentMemberRow?.avatar_url || meta.avatar || "";
+  setAvatar(document.getElementById("profile-avatar"), preferredAvatar, initialsFromLogin(meta.login));
+
   const openTwitch = document.getElementById("btn-open-twitch");
   if (openTwitch) openTwitch.href = meta.login ? `https://www.twitch.tv/${meta.login}` : "https://www.twitch.tv/";
 
@@ -777,6 +852,10 @@ async function loadProfileView() {
   if (hint) hint.hidden = approved;
 
   if (approved) {
+	// preload basics into form
+	const dn = document.getElementById("profile-displayname");
+	if (dn) dn.value = currentMemberRow?.display_name || meta.display || "";
+	wireProfileBasics();
     wireSocials();
     wireSchedule();
     await loadSocials();
