@@ -402,79 +402,42 @@ function renderLiveCarousel() {
     next.addEventListener('click', () => track.scrollBy({ left: scrollBy(), behavior: 'smooth' }));
   }
 }
-function wireProfileBasics() {
-  const form = document.getElementById("profile-basics-form");
+function wireBio() {
+  const form = document.getElementById("bio-form");
   if (!form || form.dataset.wired) return;
   form.dataset.wired = "1";
 
-  form.onsubmit = async (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!sb || !currentSession?.user) return;
 
-    const hint = document.getElementById("profile-save-hint");
+    const hint = document.getElementById("bio-hint");
     if (hint) hint.textContent = "Speichere…";
 
-    const displayName = (document.getElementById("profile-displayname")?.value || "").trim();
-    const file = document.getElementById("profile-avatar-file")?.files?.[0] || null;
+    const bio = (document.getElementById("bio-input")?.value || "").trim();
 
-    // 1) optional avatar upload
-    let newAvatarUrl = null;
-    if (file) {
-      newAvatarUrl = await uploadAvatarToStorage(file);
+    const { error } = await sb
+      .from("members")
+      .update({ bio })
+      .eq("user_id", currentSession.user.id);
+
+    if (error) {
+      console.warn(error);
+      if (hint) hint.textContent = "Speichern fehlgeschlagen.";
+      return;
     }
 
-    // 2) update members row (only fields that exist)
-    const patch = {};
-    if (displayName) patch.display_name = displayName;
-    if (newAvatarUrl) patch.avatar_url = newAvatarUrl;
-
-    if (Object.keys(patch).length) {
-      const { error } = await sb.from("members")
-        .update(patch)
-        .eq("user_id", currentSession.user.id);
-
-      if (error) {
-        console.warn(error);
-        if (hint) hint.textContent = "Konnte nicht speichern.";
-        return;
-      }
-    }
-
-    await loadMemberRow();        // refresh currentMemberRow
-    await refreshSession();       // keeps badge consistent
-    await loadProfileView();      // re-render UI
+    await loadMemberRow();
     if (hint) hint.textContent = "Gespeichert ✅";
-  };
+  });
 }
-async function uploadAvatarToStorage(file) {
-  if (!sb || !currentSession?.user) return null;
 
-  // simple validation
-  const maxMB = 2;
-  if (file.size > maxMB * 1024 * 1024) {
-    alert(`Avatar ist zu groß (max ${maxMB}MB).`);
-    return null;
-  }
-
-  const userId = currentSession.user.id;
-  const ext = (file.name.split(".").pop() || "png").toLowerCase();
-  const path = `${userId}.${ext}`;
-
-  // upload (upsert = überschreiben)
-  const { error: upErr } = await sb.storage
-    .from("avatars")
-    .upload(path, file, { upsert: true, contentType: file.type });
-
-  if (upErr) {
-    console.warn(upErr);
-    alert("Upload fehlgeschlagen. (Storage Policy / Bucket?)");
-    return null;
-  }
-
-  // public URL
-  const { data } = sb.storage.from("avatars").getPublicUrl(path);
-  return data?.publicUrl || null;
+async function loadBio() {
+  const ta = document.getElementById("bio-input");
+  if (!ta) return;
+  ta.value = currentMemberRow?.bio || "";
 }
+
 
 
 // --- SPA Router ---
@@ -503,7 +466,6 @@ function route() {
     hash.startsWith("#/members") ? "members" :
     hash.startsWith("#/wiki") ? "wiki" :
     hash.startsWith("#/profile") ? "profile" :
-    hash.startsWith("#/auth") ? "auth" :
     "home";
 
   showView(view);
@@ -513,7 +475,6 @@ function route() {
 
   if (view === "members") { loadMembersPublic(); loadStatus(); }
   if (view === "profile") loadProfileView();
-  if (view === "auth") handleAuthReturn();
 }
 
 function startHomePolling() {
@@ -852,9 +813,8 @@ async function loadProfileView() {
   if (hint) hint.hidden = approved;
 
   if (approved) {
-	// preload basics into form
-	const dn = document.getElementById("profile-displayname");
-	if (dn) dn.value = currentMemberRow?.display_name || meta.display || "";
+	wireBio();
+	await loadBio();
 	wireProfileBasics();
     wireSocials();
     wireSchedule();
@@ -1107,33 +1067,31 @@ async function handleOAuthQueryReturn() {
   if (!sb) return;
 
   const url = new URL(window.location.href);
-  const isAuthReturn = url.searchParams.has("code") || url.searchParams.has("error") || url.searchParams.has("auth");
-  if (!isAuthReturn) return;
+  const hasAuthReturn = url.searchParams.has("code") || url.searchParams.has("error") || url.searchParams.has("auth");
+  if (!hasAuthReturn) return;
 
-  // If we got an OAuth code, exchange it for a session
+  // Supabase PKCE exchange (manchmal macht supabase-js das automatisch, aber wir machen es robust)
   const code = url.searchParams.get("code");
   if (code) {
-    try {
-      await sb.auth.exchangeCodeForSession(code);
-    } catch (e) {
-      console.warn("exchangeCodeForSession failed", e);
-    }
+    try { await sb.auth.exchangeCodeForSession(code); } catch (e) { console.warn(e); }
   }
 
   await refreshSession();
 
-  // Clean up URL (remove ?auth=1&code=... etc)
+  // URL cleanup
   url.search = "";
   history.replaceState({}, document.title, url.toString());
 
-  // Go to profile (so UI updates immediately)
+  // Ab ins Profil
   location.hash = "#/profile";
 }
+
 
 // --- Boot ---
 window.addEventListener("DOMContentLoaded", async () => {
   sb = initSupabase();
   await handleOAuthQueryReturn();
+  await refreshSession();
   // keep session fresh when auth state changes
   if (sb) {
     sb.auth.onAuthStateChange(async () => {

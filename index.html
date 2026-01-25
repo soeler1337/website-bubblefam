@@ -15,9 +15,9 @@
 
   <!-- App scripts -->
   <script src="streamer-config.js?v=2.1.0" defer></script>
-  <script src="script.js?v=2.1.5" defer></script>
+  <script src="script.js?v=2.1.6" defer></script>
 
-  <link rel="stylesheet" href="style.css?v=2.1.1" />
+  <link rel="stylesheet" href="style.css?v=2.1.2" />
 </head>
 
 <body>
@@ -178,22 +178,12 @@
           </div>
 
           <div id="profile-approved" hidden>
-			<h3>Profil</h3>
-			<form id="profile-basics-form" class="profile-basics">
-			  <label class="field">
-				<span class="muted small">Anzeigename</span>
-				<input id="profile-displayname" type="text" placeholder="z.B. Soeler" maxlength="40" />
-			  </label>
-
-			  <label class="field">
-				<span class="muted small">Avatar (PNG/JPG)</span>
-				<input id="profile-avatar-file" type="file" accept="image/png,image/jpeg,image/webp" />
-			  </label>
-
-			  <div class="button-row">
-				<button type="submit">Speichern</button>
-				<span class="muted small" id="profile-save-hint"></span>
-			  </div>
+			<h3>Bio</h3>
+			<form id="bio-form" class="stack">
+			  <textarea id="bio-input" rows="4" maxlength="300"
+				placeholder="Kurz was zu dir… (max 300 Zeichen)"></textarea>
+			  <button type="submit">Bio speichern</button>
+			  <div class="muted small" id="bio-hint"></div>
 			</form>
             <h3>Social Links</h3>
             <form id="social-form" class="inline-form">
