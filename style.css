@@ -1057,3 +1057,18 @@
   .modal{ width: 100%; }
   .modal-head{ align-items:flex-start; }
 }
+.profile-basics {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.profile-basics .field {
+  display: grid;
+  gap: 6px;
+}
+
+.profile-basics input[type="text"],
+.profile-basics input[type="file"] {
+  width: 100%;
+}
