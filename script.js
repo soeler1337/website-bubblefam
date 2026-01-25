@@ -515,6 +515,27 @@ async function fetchApprovedAvatarMap(logins) {
   return map;
 }
 
+function socialMeta(platform, url) {
+  const p = String(platform || '').toLowerCase();
+  const host = (() => {
+    try { return new URL(url).hostname.replace(/^www\./,''); } catch { return ''; }
+  })();
+
+  const map = {
+    youtube: { label: 'YouTube', icon: '▶' },
+    instagram: { label: 'Instagram', icon: '⌁' },
+    tiktok: { label: 'TikTok', icon: '♪' },
+    discord: { label: 'Discord', icon: '💬' },
+    x: { label: 'X', icon: '𝕏' },
+    twitter: { label: 'X', icon: '𝕏' },
+    website: { label: 'Website', icon: '🌐' },
+    twitch: { label: 'Twitch', icon: '🟣' },
+  };
+
+  const meta = map[p] || { label: platform || 'Link', icon: '🔗' };
+  return { ...meta, host };
+}
+
 async function openMemberModal(login) {
   const overlay = document.getElementById('member-modal');
   const body = document.getElementById('member-modal-body');
@@ -553,7 +574,7 @@ async function openMemberModal(login) {
   try {
     if (sb) {
       const { data: m } = await sb.from('members')
-        .select('user_id,twitch_login,display_name,avatar_url,status')
+        .select('user_id,twitch_login,display_name,avatar_url,status,bio')
         .eq('twitch_login', login)
         .eq('status', 'approved')
         .maybeSingle();
@@ -580,7 +601,10 @@ async function openMemberModal(login) {
 
   const display = member?.display_name || live?.user_name || login;
   const avatarUrl = member?.avatar_url || '';
-
+  const bioBox = (member?.bio && String(member.bio).trim()) ? `
+  <h3>Bio</h3>
+  <div class="modal-bio">${escapeHtml(member.bio)}</div>
+` : '';
   const liveBox = live ? `
     <div class="status-box ok">
       <div class="modal-live-top">
@@ -598,17 +622,27 @@ async function openMemberModal(login) {
     </div>
   `;
 
-  const socialsBox = (socials && socials.length) ? `
-    <h3>Socials</h3>
-    <div class="modal-socials">
-      ${socials.map(s => `
-        <a class="pill" href="${escapeHtml(s.url)}" target="_blank" rel="noopener">${escapeHtml(s.platform)}</a>
-      `).join('')}
-    </div>
-  ` : `
-    <h3>Socials</h3>
-    <div class="muted">Noch keine Links hinterlegt.</div>
-  `;
+	const socialsBox = (socials && socials.length) ? `
+	  <h3>Socials</h3>
+	  <div class="modal-socials-grid">
+		${socials.map(s => {
+		  const meta = socialMeta(s.platform, s.url);
+		  return `
+			<a class="social-chip" href="${escapeHtml(s.url)}" target="_blank" rel="noopener">
+			  <span class="social-ic">${escapeHtml(meta.icon)}</span>
+			  <span class="social-txt">
+				<span class="social-label">${escapeHtml(meta.label)}</span>
+				${meta.host ? `<span class="social-host">${escapeHtml(meta.host)}</span>` : ''}
+			  </span>
+			</a>
+		  `;
+		}).join('')}
+	  </div>
+	` : `
+	  <h3>Socials</h3>
+	  <div class="muted">Noch keine Links hinterlegt.</div>
+	`;
+
 
   const scheduleBox = (schedule && schedule.length) ? `
     <h3>Streamplan</h3>
@@ -638,6 +672,7 @@ async function openMemberModal(login) {
       </div>
     </div>
     ${profileHint}
+	${bioBox}
     ${liveBox}
     ${socialsBox}
     ${scheduleBox}
