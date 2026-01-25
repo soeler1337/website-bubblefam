@@ -394,10 +394,6 @@ const streamerList = [
     "twitchName": "eloquenzz"
   },
   {
-    "name": "Der_Husslon",
-    "twitchName": "der_husslon"
-  },
-  {
     "name": "TTigerV",
     "twitchName": "ttigerv"
   },
