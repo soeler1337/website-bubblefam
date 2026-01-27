@@ -62,10 +62,6 @@ const streamerList = [
     "twitchName": "xgorillajoe"
   },
   {
-    "name": "xAjdiin",
-    "twitchName": "xajdiin"
-  },
-  {
     "name": "JokahTululu",
     "twitchName": "jokahtululu"
   },
@@ -752,10 +748,6 @@ const streamerList = [
   {
     "name": "byaygr",
     "twitchName": "byaygr"
-  },
-  {
-    "name": "ravy_fps",
-    "twitchName": "ravy_fps"
   },
   {
     "name": "moosmanntv",
