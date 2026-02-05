@@ -4,7 +4,7 @@ const rdwByWeek = {
   3: ["micangelus"],
   4: ["realblizzardtv","onlyisy"],
   5: ["magiclifestyle","tayo_rulo"],
-  6: [],
+  6: ["yukiimashiro","byaygr"],
   7: [],
   8: [],
   9: [],
