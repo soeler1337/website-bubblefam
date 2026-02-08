@@ -5,7 +5,7 @@ const rdwByWeek = {
   4: ["realblizzardtv","onlyisy"],
   5: ["magiclifestyle","tayo_rulo"],
   6: ["yukiimashiro","byaygr"],
-  7: [],
+  7: ["candymannix"],
   8: [],
   9: [],
   10: [],
@@ -50,7 +50,7 @@ const rdwByWeek = {
   49: ["cenk46__","xgurbetg"],
   50: ["junacattv","naokilaif"],
   51: ["realblizzardtv","amigotv"],
-  52: ["ravy_fps","x3_leyla"]
+  52: []
 };
 const streamerList = [
   {
@@ -592,10 +592,6 @@ const streamerList = [
   {
     "name": "donkonsole",
     "twitchName": "donkonsole"
-  },
-  {
-    "name": "aileen_fiore",
-    "twitchName": "aileen_fiore"
   },
   {
     "name": "marxan__",
