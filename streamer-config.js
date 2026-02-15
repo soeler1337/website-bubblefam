@@ -338,8 +338,8 @@ const streamerList = [
     "twitchName": "x3_leyla"
   },
   {
-    "name": "GinoCampino85",
-    "twitchName": "ginocampino85"
+    "name": "black3x0rzist",
+    "twitchName": "black3x0rzist"
   },
   {
     "name": "Majin_Valtrim",
