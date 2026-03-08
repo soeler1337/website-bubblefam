@@ -346,10 +346,6 @@ const streamerList = [
     "twitchName": "Majin_Valtrim"
   },
   {
-    "name": "fikri214",
-    "twitchName": "fikri214"
-  },
-  {
     "name": "baluuu999",
     "twitchName": "baluuu999"
   },
@@ -394,10 +390,6 @@ const streamerList = [
     "twitchName": "ttigerv"
   },
   {
-    "name": "DonalDuckTV",
-    "twitchName": "donalducktv"
-  },
-  {
     "name": "Halbinho91",
     "twitchName": "halbinho91"
   },
@@ -438,10 +430,6 @@ const streamerList = [
     "twitchName": "golderkay"
   },
   {
-    "name": "endertainmentt",
-    "twitchName": "endertainmentt"
-  },
-  {
     "name": "Chris_Again",
     "twitchName": "chrys_again"
   },
@@ -462,20 +450,12 @@ const streamerList = [
     "twitchName": "akimbraindead"
   },
   {
-    "name": "og_ervo",
-    "twitchName": "og_ervo"
-  },
-  {
     "name": "Kalle",
     "twitchName": "pepper_030"
   },
   {
     "name": "ItsVolly",
     "twitchName": "itsvolly"
-  },
-  {
-    "name": "Jimswelt",
-    "twitchName": "Jimswelt"
   },
   {
     "name": "Cosya74",
@@ -496,10 +476,6 @@ const streamerList = [
   {
     "name": "JustMaiki",
     "twitchName": "justmaiki_tv"
-  },
-  {
-    "name": "NanScha53",
-    "twitchName": "nanscha53"
   },
   {
     "name": "lizzy_gamingz",
@@ -554,10 +530,6 @@ const streamerList = [
     "twitchName": "leejay17"
   },
   {
-    "name": "andrews404",
-    "twitchName": "andrews404"
-  },
-  {
     "name": "Candymannix",
     "twitchName": "candymannix"
   },
@@ -584,10 +556,6 @@ const streamerList = [
   {
     "name": "Micangelus",
     "twitchName": "micangelus"
-  },
-  {
-    "name": "Fxcuso",
-    "twitchName": "fxcuso"
   },
   {
     "name": "donkonsole",
@@ -696,10 +664,6 @@ const streamerList = [
   {
     "name": "OGSavageTTV",
     "twitchName": "ogsavagettv"
-  },
-  {
-    "name": "AKUstreamz",
-    "twitchName": "akustreamz"
   },
   {
     "name": "PhilDeJong",
