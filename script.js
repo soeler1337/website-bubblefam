@@ -561,6 +561,7 @@ function socialMeta(platform, url) {
 }
 
 async function openMemberModal(login) {
+  login = String(login || "").toLowerCase();	
   const overlay = document.getElementById('member-modal');
   const body = document.getElementById('member-modal-body');
   const title = document.getElementById('member-modal-title');
@@ -597,24 +598,23 @@ async function openMemberModal(login) {
 
   try {
     if (sb) {
-      const { data: m } = await sb
-  .from("site_memberships")
-  .select(`
-    status,
-    members (
-      user_id,
-      twitch_login,
-      display_name,
-      avatar_url,
-      bio
-    )
-  `)
-  .eq("site_id", SITE_ID)
-  .eq("status", "approved")
-  .eq("members.twitch_login", login)
+const { data: m } = await sb
+  .from("members")
+  .select("user_id,twitch_login,display_name,avatar_url,bio")
+  .eq("twitch_login", login)
   .maybeSingle();
 
-member = m?.members || null;
+if (m?.user_id) {
+  const { data: membership } = await sb
+    .from("site_memberships")
+    .select("user_id,status,role")
+    .eq("site_id", SITE_ID)
+    .eq("status", "approved")
+    .eq("user_id", m.user_id)
+    .maybeSingle();
+
+  member = membership ? m : null;
+}
 
       if (member?.user_id) {
         const { data: s1 } = await sb.from('member_socials')
