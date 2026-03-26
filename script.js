@@ -859,14 +859,14 @@ if (profileError) {
 
     const initialStatus = whitelistEntry ? "approved" : "pending";
 
-    const { error: membershipInsertError } = await sb
-      .from("site_memberships")
-      .insert({
-        site_id: SITE_ID,
-        user_id: user.id,
-        status: initialStatus,
-        role: "member"
-      });
+const { error: membershipInsertError } = await sb
+  .from("site_memberships")
+  .upsert({
+    site_id: SITE_ID,
+    user_id: user.id,
+    status: initialStatus,
+    role: "member"
+  }, { onConflict: "site_id,user_id" });
 
     if (membershipInsertError) {
       console.warn("membership insert error", membershipInsertError);
