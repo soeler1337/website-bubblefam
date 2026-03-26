@@ -47,7 +47,7 @@ const rdwByWeek = {
   46: [],
   47: [],
   48: ["itsvolly", "nepitajme"],
-  49: ["cenk46__","xgurbetg"],
+  49: ["xgurbetg"],
   50: ["junacattv","naokilaif"],
   51: ["realblizzardtv","amigotv"],
   52: []
@@ -362,10 +362,6 @@ const streamerList = [
     "twitchName": "xgurbetg"
   },
   {
-    "name": "rabestiax",
-    "twitchName": "rabestiax"
-  },
-  {
     "name": "eloquenzz",
     "twitchName": "eloquenzz"
   },
@@ -462,10 +458,6 @@ const streamerList = [
     "twitchName": "lizzy_gamingz"
   },
   {
-    "name": "MrBigMik3",
-    "twitchName": "mrbigmik3"
-  },
-  {
     "name": "lucadrakeoffizell",
     "twitchName": "lucadrakeoffizell"
   },
@@ -476,10 +468,6 @@ const streamerList = [
   {
     "name": "AuchJulien",
     "twitchName": "auchjulien"
-  },
-  {
-    "name": "Haramii08",
-    "twitchName": "haramii08"
   },
   {
     "name": "nesli0812",

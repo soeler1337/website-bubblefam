@@ -1,8 +1,14 @@
 /* BubbleFam SPA + Live Dashboard + Supabase Auth (Twitch) */
 
+const SITE_ID = "bubblefam"; // später auf der anderen Seite einfach zu "pixelwg" ändern
+
 let allStreams = [];
 let liveAvatarMap = {};
 let homeInterval = null;
+
+let currentSession = null;
+let currentProfile = null;     // globales Profil aus members
+let currentMembership = null;  // seitenbezogene Mitgliedschaft aus site_memberships
 
 // --- Config helpers (compat with streamer-config.js using const/let) ---
 function getStreamerList() {
@@ -435,7 +441,7 @@ function wireBio() {
 async function loadBio() {
   const ta = document.getElementById("bio-input");
   if (!ta) return;
-  ta.value = currentMemberRow?.bio || "";
+ta.value = currentProfile?.bio || "";
 }
 
 
@@ -498,20 +504,38 @@ function getInitials(name) {
 async function fetchApprovedAvatarMap(logins) {
   const map = {};
   const unique = Array.from(new Set((logins || []).map(x => String(x).toLowerCase()))).filter(Boolean);
-  if (!unique.length) return map;
-  if (!sb) return map;
+  if (!unique.length || !sb) return map;
+
   try {
-    const { data } = await sb.from('members')
-      .select('twitch_login,avatar_url,status')
-      .in('twitch_login', unique)
-      .eq('status', 'approved');
+    const { data, error } = await sb
+      .from("site_memberships")
+      .select(`
+        status,
+        members (
+          twitch_login,
+          avatar_url
+        )
+      `)
+      .eq("site_id", SITE_ID)
+      .eq("status", "approved");
+
+    if (error) {
+      console.warn("avatar map error", error);
+      return map;
+    }
+
     (data || []).forEach(row => {
-      const key = String(row.twitch_login || '').toLowerCase();
-      if (key && row.avatar_url) map[key] = String(row.avatar_url);
+      const m = row.members;
+      if (!m) return;
+      const login = String(m.twitch_login || "").toLowerCase();
+      if (unique.includes(login) && m.avatar_url) {
+        map[login] = m.avatar_url;
+      }
     });
   } catch (e) {
-    // ignore
+    console.warn(e);
   }
+
   return map;
 }
 
@@ -573,12 +597,24 @@ async function openMemberModal(login) {
 
   try {
     if (sb) {
-      const { data: m } = await sb.from('members')
-        .select('user_id,twitch_login,display_name,avatar_url,status,bio')
-        .eq('twitch_login', login)
-        .eq('status', 'approved')
-        .maybeSingle();
-      member = m || null;
+      const { data: m } = await sb
+  .from("site_memberships")
+  .select(`
+    status,
+    members (
+      user_id,
+      twitch_login,
+      display_name,
+      avatar_url,
+      bio
+    )
+  `)
+  .eq("site_id", SITE_ID)
+  .eq("status", "approved")
+  .eq("members.twitch_login", login)
+  .maybeSingle();
+
+member = m?.members || null;
 
       if (member?.user_id) {
         const { data: s1 } = await sb.from('member_socials')
@@ -685,17 +721,19 @@ function stopHomePolling() {
   }
 }
 
-// --- Auth / Members ---
-let currentSession = null;
-let currentMemberRow = null;
 
 function updateAuthBadge() {
   const badge = document.getElementById("nav-auth-badge");
   if (!badge) return;
-  if (!currentSession?.user) { badge.textContent = ""; return; }
-  const st = currentMemberRow?.status || "pending";
+  if (!currentSession?.user) {
+    badge.textContent = "";
+    badge.title = "";
+    return;
+  }
+
+  const st = currentMembership?.status || "pending";
   badge.textContent = st === "approved" ? "✅" : "⏳";
-  badge.title = st;
+  badge.title = `${SITE_ID}: ${st}`;
 }
 
 function redirectToProfile() {
@@ -719,15 +757,16 @@ async function refreshSession() {
   const { data } = await sb.auth.getSession();
   currentSession = data?.session || null;
 
-  if (!currentSession?.user) {
-    currentMemberRow = null;
-    updateAuthBadge();
-    return;
-  }
+	if (!currentSession?.user) {
+	  currentProfile = null;
+	  currentMembership = null;
+	  updateAuthBadge();
+	  return;
+	}
 
-  await ensureMemberRow(currentSession.user);
-  await loadMemberRow();
-  updateAuthBadge();
+	await ensureMemberRow(currentSession.user);
+	await loadMemberRow();
+	updateAuthBadge();
 }
 
 function extractTwitchMeta(user) {
@@ -737,26 +776,107 @@ function extractTwitchMeta(user) {
   const avatar = md.avatar_url || md.picture || md.profile_image_url || "";
   return { login, display, avatar };
 }
+async function loadCurrentProfileAndMembership() {
+  if (!sb || !currentSession?.user) {
+    currentProfile = null;
+    currentMembership = null;
+    return;
+  }
 
+  const { data: profile, error: profileError } = await sb
+    .from("members")
+    .select("*")
+    .eq("user_id", currentSession.user.id)
+    .maybeSingle();
+
+  if (profileError) {
+    console.warn("load profile error", profileError);
+  }
+
+  const { data: membership, error: membershipError } = await sb
+    .from("site_memberships")
+    .select("*")
+    .eq("user_id", currentSession.user.id)
+    .eq("site_id", SITE_ID)
+    .maybeSingle();
+
+  if (membershipError) {
+    console.warn("load membership error", membershipError);
+  }
+
+  currentProfile = profile || null;
+  currentMembership = membership || null;
+}
 async function ensureMemberRow(user) {
   if (!sb) return;
-  const { login, display, avatar } = extractTwitchMeta(user);
-  // try insert (will fail if exists)
-  const payload = { user_id: user.id, twitch_login: (login || "").toLowerCase(), display_name: display, avatar_url: avatar };
-  const { data, error } = await sb
-  .from("members")
-  .upsert(payload, { onConflict: "user_id" })
-  .select("*")
-  .single();
 
-  if (error) throw error;
-  currentMemberRow = data;
+  const { login, display, avatar } = extractTwitchMeta(user);
+  const twitchLogin = (login || "").toLowerCase();
+
+  // 1) Globales Profil anlegen/aktualisieren
+  const profilePayload = {
+    user_id: user.id,
+    twitch_login: twitchLogin,
+    display_name: display,
+    avatar_url: avatar
+  };
+
+  const { error: profileError } = await sb
+    .from("members")
+    .upsert(profilePayload, { onConflict: "user_id" });
+
+  if (profileError) {
+    console.warn("profile upsert error", profileError);
+    throw profileError;
+  }
+
+  // 2) Prüfen, ob für diese Seite schon eine Membership existiert
+  const { data: existingMembership, error: membershipReadError } = await sb
+    .from("site_memberships")
+    .select("id,status,role")
+    .eq("user_id", user.id)
+    .eq("site_id", SITE_ID)
+    .maybeSingle();
+
+  if (membershipReadError) {
+    console.warn("membership read error", membershipReadError);
+  }
+
+  // 3) Wenn nicht vorhanden: Membership für aktuelle Seite anlegen
+  if (!existingMembership) {
+    const { data: whitelistEntry, error: whitelistError } = await sb
+      .from("site_whitelist")
+      .select("twitch_login")
+      .eq("site_id", SITE_ID)
+      .eq("twitch_login", twitchLogin)
+      .maybeSingle();
+
+    if (whitelistError) {
+      console.warn("site whitelist read error", whitelistError);
+    }
+
+    const initialStatus = whitelistEntry ? "approved" : "pending";
+
+    const { error: membershipInsertError } = await sb
+      .from("site_memberships")
+      .insert({
+        site_id: SITE_ID,
+        user_id: user.id,
+        status: initialStatus,
+        role: "member"
+      });
+
+    if (membershipInsertError) {
+      console.warn("membership insert error", membershipInsertError);
+      throw membershipInsertError;
+    }
+  }
+
+  await loadCurrentProfileAndMembership();
 }
 
 async function loadMemberRow() {
-  if (!sb || !currentSession?.user) return;
-  const { data } = await sb.from("members").select("*").eq("user_id", currentSession.user.id).maybeSingle();
-  currentMemberRow = data || null;
+  await loadCurrentProfileAndMembership();
 }
 
 async function loginWithTwitch() {
@@ -771,7 +891,8 @@ async function logout() {
   if (!sb) return;
   await sb.auth.signOut();
   currentSession = null;
-  currentMemberRow = null;
+  currentProfile = null;
+currentMembership = null;
   updateAuthBadge();
   route();
 }
@@ -827,8 +948,8 @@ async function loadProfileView() {
   const meta = extractTwitchMeta(currentSession.user);
   setText("profile-name", meta.display);
   setText("profile-login", meta.login ? `@${meta.login}` : "");
-  const status = currentMemberRow?.status || "pending";
-  const role = currentMemberRow?.role || "member";
+	const status = currentMembership?.status || "pending";
+	const role = currentMembership?.role || "member";
 
   setPill("profile-status", status, status);
   const roleEl = document.getElementById("profile-role");
@@ -837,7 +958,7 @@ async function loadProfileView() {
     roleEl.textContent = role === "admin" ? "admin" : "";
   }
 
-  const preferredAvatar = currentMemberRow?.avatar_url || meta.avatar || "";
+const preferredAvatar = currentProfile?.avatar_url || meta.avatar || "";
   setAvatar(document.getElementById("profile-avatar"), preferredAvatar, initialsFromLogin(meta.login));
 
   const openTwitch = document.getElementById("btn-open-twitch");
@@ -878,10 +999,20 @@ async function loadMembersPublic() {
   if (!grid) return;
   grid.innerHTML = "<div class='muted'>Lade…</div>";
 
-  const { data, error } = await sb.from("members")
-    .select("twitch_login,display_name,avatar_url,status")
-    .eq("status","approved")
-    .order("display_name", { ascending: true });
+const { data, error } = await sb
+  .from("site_memberships")
+  .select(`
+    status,
+    role,
+    members (
+      user_id,
+      twitch_login,
+      display_name,
+      avatar_url
+    )
+  `)
+  .eq("site_id", SITE_ID)
+  .eq("status", "approved");
 
   if (error) {
     grid.innerHTML = "<div class='muted'>Konnte Mitglieder nicht laden.</div>";
@@ -889,7 +1020,9 @@ async function loadMembersPublic() {
   }
 
   grid.innerHTML = "";
-  (data || []).forEach(m => {
+  (data || []).forEach(row => {
+  const m = row.members;
+  if (!m) return;
     const card = document.createElement("div");
     card.className = "member-card";
     const avatar = document.createElement("div");
@@ -909,7 +1042,7 @@ async function loadMembersPublic() {
 async function loadAdminPanelsIfNeeded() {
   const panel = document.getElementById("admin-panel");
   if (!panel) return;
-  const isAdmin = currentMemberRow?.role === "admin" && currentMemberRow?.status === "approved";
+const isAdmin = currentMembership?.role === "admin" && currentMembership?.status === "approved";
   panel.hidden = !isAdmin;
   if (!isAdmin) return;
 
@@ -922,7 +1055,10 @@ async function loadAdminPanelsIfNeeded() {
       e.preventDefault();
       const login = (document.getElementById("whitelist-login")?.value || "").trim().toLowerCase();
       if (!login) return;
-      await sb.from("whitelist").insert({ twitch_login: login });
+      await sb.from("site_whitelist").insert({
+  site_id: SITE_ID,
+  twitch_login: login
+});
       document.getElementById("whitelist-login").value = "";
       await loadWhitelist();
     };
@@ -934,10 +1070,19 @@ async function loadPendingList() {
   if (!wrap) return;
   wrap.innerHTML = "<div class='muted'>Lade…</div>";
 
-  const { data } = await sb.from("members")
-    .select("user_id,twitch_login,display_name,status,role")
-    .eq("status","pending")
-    .order("created_at", { ascending: false });
+  const { data } = await sb
+    .from("site_memberships")
+    .select(`
+      user_id,
+      status,
+      role,
+      members (
+        twitch_login,
+        display_name
+      )
+    `)
+    .eq("site_id", SITE_ID)
+    .eq("status", "pending");
 
   wrap.innerHTML = "";
   if (!data || data.length === 0) {
@@ -945,10 +1090,13 @@ async function loadPendingList() {
     return;
   }
 
-  data.forEach(m => {
-    const row = document.createElement("div");
-    row.className = "list-item";
-    row.innerHTML = `
+  data.forEach(row => {
+    const m = row.members;
+    if (!m) return;
+
+    const el = document.createElement("div");
+    el.className = "list-item";
+    el.innerHTML = `
       <div>
         <b>${escapeHtml(m.display_name || m.twitch_login)}</b>
         <div class="muted small">@${escapeHtml(m.twitch_login || "")}</div>
@@ -958,16 +1106,27 @@ async function loadPendingList() {
         <button type="button" data-ban>Ban</button>
       </div>
     `;
-    row.querySelector("[data-approve]").onclick = async () => {
-      await sb.from("members").update({ status: "approved" }).eq("user_id", m.user_id);
+
+    el.querySelector("[data-approve]").onclick = async () => {
+      await sb.from("site_memberships")
+        .update({ status: "approved" })
+        .eq("user_id", row.user_id)
+        .eq("site_id", SITE_ID);
+
       await loadPendingList();
       await loadMembersPublic();
     };
-    row.querySelector("[data-ban]").onclick = async () => {
-      await sb.from("members").update({ status: "banned" }).eq("user_id", m.user_id);
+
+    el.querySelector("[data-ban]").onclick = async () => {
+      await sb.from("site_memberships")
+        .update({ status: "banned" })
+        .eq("user_id", row.user_id)
+        .eq("site_id", SITE_ID);
+
       await loadPendingList();
     };
-    wrap.appendChild(row);
+
+    wrap.appendChild(el);
   });
 }
 
@@ -976,7 +1135,12 @@ async function loadWhitelist() {
   if (!wrap) return;
   wrap.innerHTML = "<div class='muted'>Lade…</div>";
 
-  const { data } = await sb.from("whitelist").select("*").order("added_at", { ascending: false });
+  const { data } = await sb
+    .from("site_whitelist")
+    .select("*")
+    .eq("site_id", SITE_ID)
+    .order("added_at", { ascending: false });
+
   wrap.innerHTML = "";
   if (!data || data.length === 0) {
     wrap.innerHTML = "<div class='muted'>Whitelist ist leer.</div>";
@@ -991,7 +1155,11 @@ async function loadWhitelist() {
       <button type="button" data-del>Entfernen</button>
     `;
     row.querySelector("[data-del]").onclick = async () => {
-      await sb.from("whitelist").delete().eq("twitch_login", w.twitch_login);
+      await sb.from("site_whitelist")
+        .delete()
+        .eq("site_id", SITE_ID)
+        .eq("twitch_login", w.twitch_login);
+
       await loadWhitelist();
     };
     wrap.appendChild(row);
