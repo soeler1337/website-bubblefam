@@ -498,10 +498,6 @@ const streamerList = [
     "twitchName": "melizoki"
   },
   {
-    "name": "sekounsoo",
-    "twitchName": "sekounsoo"
-  },
-  {
     "name": "LeeJay17",
     "twitchName": "leejay17"
   },
