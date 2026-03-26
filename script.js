@@ -598,14 +598,21 @@ async function openMemberModal(login) {
 
   try {
     if (sb) {
-const { data: m } = await sb
+const { data: candidates, error: memberError } = await sb
   .from("members")
   .select("user_id,twitch_login,display_name,avatar_url,bio")
-  .eq("twitch_login", login)
-  .maybeSingle();
+  .ilike("twitch_login", login);
+
+if (memberError) {
+  console.warn("modal member lookup error", memberError);
+}
+
+const m = (candidates || []).find(x =>
+  String(x.twitch_login || "").toLowerCase() === login
+) || (candidates || [])[0] || null;
 
 if (m?.user_id) {
-  const { data: membership } = await sb
+  const { data: membership, error: membershipError } = await sb
     .from("site_memberships")
     .select("user_id,status,role")
     .eq("site_id", SITE_ID)
@@ -613,22 +620,36 @@ if (m?.user_id) {
     .eq("user_id", m.user_id)
     .maybeSingle();
 
+  if (membershipError) {
+    console.warn("modal membership lookup error", membershipError);
+  }
+
   member = membership ? m : null;
 }
 
       if (member?.user_id) {
-        const { data: s1 } = await sb.from('member_socials')
-          .select('platform,url')
-          .eq('user_id', member.user_id)
-          .order('platform', { ascending: true });
-        socials = s1 || [];
+        const { data: s1, error: socialsError } = await sb
+  .from('member_socials')
+  .select('platform,url')
+  .eq('user_id', member.user_id)
+  .order('platform', { ascending: true });
 
-        const { data: s2 } = await sb.from('stream_schedule')
-          .select('weekday,start_time,end_time,notes')
-          .eq('user_id', member.user_id)
-          .order('weekday', { ascending: true })
-          .order('start_time', { ascending: true });
-        schedule = s2 || [];
+if (socialsError) {
+  console.warn("modal socials error", socialsError);
+}
+socials = s1 || [];
+
+const { data: s2, error: scheduleError } = await sb
+  .from('stream_schedule')
+  .select('weekday,start_time,end_time,notes')
+  .eq('user_id', member.user_id)
+  .order('weekday', { ascending: true })
+  .order('start_time', { ascending: true });
+
+if (scheduleError) {
+  console.warn("modal schedule error", scheduleError);
+}
+schedule = s2 || [];
       }
     }
   } catch (e) {
