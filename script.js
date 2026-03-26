@@ -830,7 +830,7 @@ if (profileError) {
   // NICHT crashen lassen!
   return;
 }
-  }
+ 
 
   // 2) Prüfen, ob für diese Seite schon eine Membership existiert
   const { data: existingMembership, error: membershipReadError } = await sb
