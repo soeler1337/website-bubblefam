@@ -825,9 +825,11 @@ async function ensureMemberRow(user) {
     .from("members")
     .upsert(profilePayload, { onConflict: "user_id" });
 
-  if (profileError) {
-    console.warn("profile upsert error", profileError);
-    throw profileError;
+if (profileError) {
+  console.warn("profile upsert error", profileError);
+  // NICHT crashen lassen!
+  return;
+}
   }
 
   // 2) Prüfen, ob für diese Seite schon eine Membership existiert
