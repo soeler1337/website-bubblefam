@@ -142,14 +142,6 @@ const streamerList = [
     "twitchName": "nerdshit"
   },
   {
-    "name": "adrixn777_",
-    "twitchName": "adrixn777_"
-  },
-  {
-    "name": "brumefeelings",
-    "twitchName": "brumefeelings"
-  },
-  {
     "name": "Die_M1ka",
     "twitchName": "die_m1ka"
   },
@@ -234,20 +226,12 @@ const streamerList = [
     "twitchName": "headhunt3er"
   },
   {
-    "name": "monalisacom",
-    "twitchName": "monalisacom"
-  },
-  {
     "name": "maenniee",
     "twitchName": "maenniee"
   },
   {
     "name": "notorious_nati",
     "twitchName": "notorious_nati"
-  },
-  {
-    "name": "cenk46__",
-    "twitchName": "cenk46__"
   },
   {
     "name": "DrPohli",
@@ -390,10 +374,6 @@ const streamerList = [
     "twitchName": "ttigerv"
   },
   {
-    "name": "Halbinho91",
-    "twitchName": "halbinho91"
-  },
-  {
     "name": "sultan_pk",
     "twitchName": "sultan_pk"
   },
@@ -488,10 +468,6 @@ const streamerList = [
   {
     "name": "lucadrakeoffizell",
     "twitchName": "lucadrakeoffizell"
-  },
-  {
-    "name": "sousa94",
-    "twitchName": "sousa94_"
   },
   {
     "name": "itspelokii",
