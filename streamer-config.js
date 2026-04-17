@@ -170,10 +170,6 @@ const streamerList = [
     "twitchName": "jvblestreamt"
   },
   {
-    "name": "naokilaif",
-    "twitchName": "naokilaif"
-  },
-  {
     "name": "zitronitoni",
     "twitchName": "zitronitoni"
   },
@@ -206,10 +202,6 @@ const streamerList = [
     "twitchName": "RamiC14"
   },
   {
-    "name": "Mehluxka",
-    "twitchName": "mehluxka"
-  },
-  {
     "name": "GabaTV",
     "twitchName": "gabatv"
   },
@@ -240,10 +232,6 @@ const streamerList = [
   {
     "name": "YupinaStar",
     "twitchName": "yupinastar"
-  },
-  {
-    "name": "thatsgwin",
-    "twitchName": "thatsgwin"
   },
   {
     "name": "mallebuu",
@@ -314,10 +302,6 @@ const streamerList = [
     "twitchName": "x_evilara_x"
   },
   {
-    "name": "jayjustsayin",
-    "twitchName": "jayjustsayin"
-  },
-  {
     "name": "leylaaa1994",
     "twitchName": "x3_leyla"
   },
@@ -358,10 +342,6 @@ const streamerList = [
     "twitchName": "lochaabi"
   },
   {
-    "name": "xgurbetg",
-    "twitchName": "xgurbetg"
-  },
-  {
     "name": "eloquenzz",
     "twitchName": "eloquenzz"
   },
@@ -400,14 +380,6 @@ const streamerList = [
   {
     "name": "dzenoZH",
     "twitchName": "dzeno_zh"
-  },
-  {
-    "name": "GolDErkay",
-    "twitchName": "golderkay"
-  },
-  {
-    "name": "Chris_Again",
-    "twitchName": "chrys_again"
   },
   {
     "name": "JoycePaulin",
