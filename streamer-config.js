@@ -78,10 +78,6 @@ const streamerList = [
     "twitchName": "mustibaz"
   },
   {
-    "name": "halidiin",
-    "twitchName": "halidiin"
-  },
-  {
     "name": "Pokeeebooo",
     "twitchName": "pokeeebooo"
   },
@@ -120,10 +116,6 @@ const streamerList = [
   {
     "name": "D3rSheriff",
     "twitchName": "d3rsheriff"
-  },
-  {
-    "name": "jassiegal",
-    "twitchName": "jassiegal"
   },
   {
     "name": "magiclifestyle",
@@ -604,10 +596,6 @@ const streamerList = [
   {
     "name": "QueenLaufii",
     "twitchName": "queenlaufi"
-  },
-  {
-    "name": "Simlira",
-    "twitchName": "simlira"
   },
   {
     "name": "apndnd",
