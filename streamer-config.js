@@ -602,10 +602,6 @@ const streamerList = [
     "twitchName": "apndnd"
   },
   {
-    "name": "Rehleiin",
-    "twitchName": "rehleiinstreams"
-  },
-  {
     "name": "donridex",
     "twitchName": "donridex"
   },
