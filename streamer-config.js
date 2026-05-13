@@ -98,10 +98,6 @@ const streamerList = [
     "twitchName": "quaniiiboiii"
   },
   {
-    "name": "ausmpott",
-    "twitchName": "ausmpott"
-  },
-  {
     "name": "onlyisy",
     "twitchName": "onlyisy"
   },
@@ -496,10 +492,6 @@ const streamerList = [
   {
     "name": "Felis_Chaos",
     "twitchName": "felis_chaos"
-  },
-  {
-    "name": "DR_RaiinZ",
-    "twitchName": "dr_raiinz"
   },
   {
     "name": "locke_die_socke1",
